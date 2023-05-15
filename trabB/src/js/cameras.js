@@ -9,9 +9,9 @@ function createCameraFront() {
     );
     
     cameraFront.position.x = 0;
-    cameraFront.position.y = 4;
+    cameraFront.position.y = 15;
     cameraFront.position.z = 40;
-    cameraFront.lookAt(0, 4, 0);
+    cameraFront.lookAt(0, 15, 0);
 }
 
 function createCameraSide() {
@@ -23,10 +23,10 @@ function createCameraSide() {
         1000
     );
 
-    cameraSide.position.x = 40;
-    cameraSide.position.y = 4;
+    cameraSide.position.x = 80;
+    cameraSide.position.y = 15;
     cameraSide.position.z = 0;
-    cameraSide.lookAt(0, 4, 0);
+    cameraSide.lookAt(0, 15, 0);
 
 }
 
@@ -72,9 +72,9 @@ function createCameraPerspective() {
         1000
     )
 
-    cameraPerspective.position.x = 30;
-    cameraPerspective.position.y = 30;
-    cameraPerspective.position.z = 30;
+    cameraPerspective.position.x = 50;
+    cameraPerspective.position.y = 50;
+    cameraPerspective.position.z = 50;
     cameraPerspective.lookAt(0, 0, 0);
 
 }

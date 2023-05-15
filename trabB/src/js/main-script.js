@@ -17,7 +17,8 @@ function createScene(){
     scene.background = new THREE.Color(0.9,0.9,0.9);
 
     scene.add(new THREE.AxisHelper(10));
-    createRobot(0, 0, 0);
+    //createRobot(0, 0, 0);
+    createTrailer(0, 0, -30);
 }
 
 //////////////////////
@@ -90,6 +91,29 @@ function addAntenna(obj, x, y, z){
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y, z);
     obj.add(mesh);
+}
+
+function createTrailer(x, y, z) {
+    'use strict';
+
+    var trailer = new THREE.Object3D();
+
+    material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+
+    addTrailerBase(trailer, 0, 9, 0);
+    addTrailerUnder(trailer, 0, 4, -4);
+    // add a wheel standing on the ground
+    addWheel(trailer, 7, 4, -15, 0, 0, Math.PI / 2);
+    addWheel(trailer, 7, 4, -5, 0, 0, Math.PI / 2);
+    addWheel(trailer, -7, 4, -15, 0, 0, Math.PI / 2);
+    addWheel(trailer, -7, 4, -5, 0, 0, Math.PI / 2);
+
+    scene.add(trailer);
+
+    trailer.position.x = x;
+    trailer.position.y = y;
+    trailer.position.z = z;
+
 }
 
 //////////////////////
