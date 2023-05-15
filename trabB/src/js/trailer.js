@@ -34,6 +34,24 @@ function addTrailerUnder(obj, x, y, z){
 
 }
 
+function addTrailerConnector(obj, x, y, z){
+    'use strict';
+
+    var trailerConnectorWidth = 16;
+    var trailerConnectorHeight = 4;
+    var trailerConnectorLength = 4;
+
+    geometry = new THREE.BoxGeometry(trailerConnectorWidth, trailerConnectorHeight, trailerConnectorLength);
+
+    // 20 is half of the trailer height
+    const offsetY = trailerConnectorHeight / 2;
+    geometry.translate(0, offsetY, 0);
+
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x, y, z);
+    obj.add(mesh);
+}
+
 function addWheel(obj, x, y, z, rx, ry, rz){
     'use strict';
 

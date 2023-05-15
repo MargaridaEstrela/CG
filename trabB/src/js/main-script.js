@@ -17,7 +17,7 @@ function createScene(){
     scene.background = new THREE.Color(0.9,0.9,0.9);
 
     scene.add(new THREE.AxisHelper(10));
-    //createRobot(0, 0, 0);
+    createRobot(0, 0, 0);
     createTrailer(0, 0, -30);
 }
 
@@ -102,6 +102,7 @@ function createTrailer(x, y, z) {
 
     addTrailerBase(trailer, 0, 9, 0);
     addTrailerUnder(trailer, 0, 4, -4);
+    addTrailerConnector(trailer, 0, 9, 22);
     // add a wheel standing on the ground
     addWheel(trailer, 7, 4, -15, 0, 0, Math.PI / 2);
     addWheel(trailer, 7, 4, -5, 0, 0, Math.PI / 2);
