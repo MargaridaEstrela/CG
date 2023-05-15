@@ -1,7 +1,9 @@
 //////////////////////
 /* GLOBAL VARIABLES */
 //////////////////////
-var camera, scene, renderer
+var camera, scene, renderer;
+
+var geometry, material, mesh;
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -9,11 +11,27 @@ var camera, scene, renderer
 function createScene(){
     'use strict';
 
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0.9,0.9,0.9);
+
+    scene.add(new THREE.AxisHelper(10));
+    createRobot(0, 0, 0);
 }
 
 //////////////////////
 /* CREATE CAMERA(S) */
 //////////////////////
+function createCamera() {
+    'use strict';
+    camera = new THREE.PerspectiveCamera(70,
+                                         window.innerWidth / window.innerHeight,
+                                         1,
+                                         1000);
+    camera.position.x = 50;
+    camera.position.y = 50;
+    camera.position.z = 50;
+    camera.lookAt(scene.position);
+}
 
 
 /////////////////////
@@ -23,6 +41,59 @@ function createScene(){
 ////////////////////////
 /* CREATE OBJECT3D(S) */
 ////////////////////////
+function createRobot(x, y, z){
+    'use strict';
+
+    var robot = new THREE.Object3D();
+
+    addHead(robot, 1, 1, 1);
+
+    scene.add(robot);
+
+    robot.position.x = x;
+    robot.position.y = y;
+    robot.position.z = z;
+}
+
+function addHead(obj, x, y, z){
+    'use strict';
+
+    var head = new THREE.Object3D();
+
+    material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    geometry = new THREE.BoxGeometry(4, 4, 4);
+    mesh = new THREE.Mesh(geometry, material);
+
+    head.add(mesh);
+    head.position.set(x, y, z);
+
+    // Calculate the offset to move the head so that its center aligns with the origin
+    var headOffset = new THREE.Vector3(2, 0, 2);
+    head.position.sub(headOffset);
+
+    addEye(head, 1, 2, 4);
+    addEye(head, 3, 2, 4);
+    addAntenna(head, 6.5, 8, 4);
+    addAntenna(head, 4, 8, 4);
+
+    obj.add(head);
+}
+
+function addEye(obj, x, y, z){
+    'use strict';
+    geometry = new THREE.BoxGeometry(1, 1, 0.5);
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x, y, z);
+    obj.add(mesh);
+}
+
+function addAntenna(obj, x, y, z){
+    'use strict';
+    geometry = new THREE.BoxGeometry(1, 2, 1);
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x, y, z);
+    obj.add(mesh);
+}
 
 //////////////////////
 /* CHECK COLLISIONS */
@@ -81,6 +152,10 @@ function init() {
 /////////////////////
 function animate() {
     'use strict';
+
+    render();
+
+    requestAnimationFrame(animate);
 
 }
 
