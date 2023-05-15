@@ -1,7 +1,7 @@
 //////////////////////
 /* GLOBAL VARIABLES */
 //////////////////////
-
+var camera, scene, renderer
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -53,7 +53,7 @@ function update(){
 /////////////
 function render() {
     'use strict';
-
+    renderer.render(scene, camera);
 }
 
 ////////////////////////////////
@@ -61,7 +61,19 @@ function render() {
 ////////////////////////////////
 function init() {
     'use strict';
+    renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
+    createScene();
+    createCamera();
+
+    render();
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", onResize);
 }
 
 /////////////////////
@@ -77,7 +89,12 @@ function animate() {
 ////////////////////////////
 function onResize() { 
     'use strict';
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
+    if (window.innerHeight > 0 && window.innerWidth > 0) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    }
 }
 
 ///////////////////////
