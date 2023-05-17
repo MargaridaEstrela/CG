@@ -64,3 +64,16 @@ function addWheel(obj, x, y, z, rx, ry, rz){
     obj.add(mesh);
 
 }
+
+function updateTrailerPosition(){
+    'use strict';
+
+    if (trailerMovingForward)
+        trailer.position.z += trailerSpeed;
+    if (trailerMovingBackward)
+        trailer.position.z -= trailerSpeed;
+    if (trailerMovingLeft)
+        trailer.position.x += trailerSpeed;
+    if (trailerMovingRight)
+        trailer.position.x -= trailerSpeed;
+}

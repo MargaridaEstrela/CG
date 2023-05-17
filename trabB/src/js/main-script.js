@@ -4,6 +4,14 @@
 // Cameras
 var cameraFront, cameraSide, cameraTop, cameraOrtographic, cameraPerspective;
 
+// Trailer
+var trailer;
+var trailerSpeed = 0.3;
+var trailerMovingLeft = false;
+var trailerMovingRight = false;
+var trailerMovingForward = false;
+var trailerMovingBackward = false;
+
 var camera, renderer, scene;
 var geometry, material, mesh;
 
@@ -96,7 +104,7 @@ function addAntenna(obj, x, y, z){
 function createTrailer(x, y, z) {
     'use strict';
 
-    var trailer = new THREE.Object3D();
+    trailer = new THREE.Object3D();
 
     material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
@@ -139,6 +147,7 @@ function handleCollisions(){
 function update(){
     'use strict';
 
+    updateTrailerPosition();
 }
 
 /////////////
@@ -168,6 +177,7 @@ function init() {
     render();
 
     window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
     window.addEventListener("resize", onResize);
 }
 
@@ -176,6 +186,8 @@ function init() {
 /////////////////////
 function animate() {
     'use strict';
+
+    update();
 
     render();
 
@@ -203,6 +215,18 @@ function onKeyDown(e) {
     'use strict';
 
     switch (e.keyCode) {
+        case 37: //left
+            trailerMovingLeft = true;
+            break;
+        case 38: //up
+            trailerMovingForward = true;
+            break;
+        case 39: //right
+            trailerMovingRight = true;
+            break;
+        case 40: //down
+            trailerMovingBackward = true;
+            break;
         case 49: //1
             camera = cameraFront;
             break;
@@ -227,4 +251,18 @@ function onKeyDown(e) {
 function onKeyUp(e){
     'use strict';
 
+    switch (e.keyCode) {
+        case 37: //left
+            trailerMovingLeft = false;
+            break;
+        case 38: //up
+            trailerMovingForward = false;
+            break;
+        case 39: //right
+            trailerMovingRight = false;
+            break;
+        case 40: //down
+            trailerMovingBackward = false;
+            break;
+    }
 }
