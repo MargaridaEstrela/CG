@@ -25,6 +25,10 @@ function createScene(){
     scene.background = new THREE.Color(0.9,0.9,0.9);
 
     scene.add(new THREE.AxisHelper(10));
+
+    
+    material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+
     createRobot(0, 0, 0);
     createTrailer(0, 0, -30);
 }
@@ -66,7 +70,6 @@ function addHead(obj, x, y, z){
 
     var head = new THREE.Object3D();
 
-    material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
     geometry = new THREE.BoxGeometry(4, 4, 4);
     mesh = new THREE.Mesh(geometry, material);
 
@@ -105,8 +108,6 @@ function createTrailer(x, y, z) {
     'use strict';
 
     trailer = new THREE.Object3D();
-
-    material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
     addTrailerBase(trailer, 0, 9, 0);
     addTrailerUnder(trailer, 0, 4, -4);
@@ -241,6 +242,9 @@ function onKeyDown(e) {
             break;
         case 53: //5
             camera = cameraPerspective;
+            break;
+        case 54: //6
+            material.wireframe = !material.wireframe;
             break;
     }
 }
