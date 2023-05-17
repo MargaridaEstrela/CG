@@ -13,7 +13,9 @@ var trailerMovingForward = false;
 var trailerMovingBackward = false;
 
 var camera, renderer, scene;
-var geometry, material, mesh;
+var geometry, mesh;
+
+var materials = {};
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -27,7 +29,7 @@ function createScene(){
     scene.add(new THREE.AxisHelper(10));
 
     
-    material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    materials.default = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
     createRobot(0, 0, 0);
     createTrailer(0, 0, -30);
@@ -71,7 +73,7 @@ function addHead(obj, x, y, z){
     var head = new THREE.Object3D();
 
     geometry = new THREE.BoxGeometry(4, 4, 4);
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE.Mesh(geometry, materials.default);
 
     head.add(mesh);
     head.position.set(x, y, z);
@@ -91,7 +93,7 @@ function addHead(obj, x, y, z){
 function addEye(obj, x, y, z){
     'use strict';
     geometry = new THREE.BoxGeometry(1, 1, 0.5);
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE.Mesh(geometry, materials.default);
     mesh.position.set(x, y, z);
     obj.add(mesh);
 }
@@ -99,7 +101,7 @@ function addEye(obj, x, y, z){
 function addAntenna(obj, x, y, z){
     'use strict';
     geometry = new THREE.BoxGeometry(1, 2, 1);
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE.Mesh(geometry, materials.default);
     mesh.position.set(x, y, z);
     obj.add(mesh);
 }
@@ -108,6 +110,8 @@ function createTrailer(x, y, z) {
     'use strict';
 
     trailer = new THREE.Object3D();
+
+    createTrailerMaterials();
 
     addTrailerBase(trailer, 0, 9, 0);
     addTrailerUnder(trailer, 0, 4, -4);
@@ -244,7 +248,10 @@ function onKeyDown(e) {
             camera = cameraPerspective;
             break;
         case 54: //6
-            material.wireframe = !material.wireframe;
+            // toggle wireframe for every material
+            for (var material in materials) {
+                materials[material].wireframe = !materials[material].wireframe;
+            }
             break;
     }
 }
