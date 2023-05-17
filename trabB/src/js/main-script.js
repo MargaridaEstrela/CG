@@ -2,7 +2,7 @@
 /* GLOBAL VARIABLES */
 //////////////////////
 // Cameras
-var cameraFront, cameraSide, cameraTop, cameraOrtographic, cameraPerspective;
+var cameras = {};
 
 // Trailer
 var trailer;
@@ -177,7 +177,7 @@ function init() {
     createScene();
     createCameras();
 
-    camera = cameraFront;
+    camera = cameras.front;
 
     render();
 
@@ -233,19 +233,19 @@ function onKeyDown(e) {
             trailerMovingBackward = true;
             break;
         case 49: //1
-            camera = cameraFront;
+            camera = cameras.front;
             break;
         case 50: //2
-            camera = cameraSide;
+            camera = cameras.side;
             break;
         case 51: //3
-            camera = cameraTop;
+            camera = cameras.top;
             break;
         case 52: //4
-            camera = cameraOrtographic;
+            camera = cameras.ortographic;
             break;
         case 53: //5
-            camera = cameraPerspective;
+            camera = cameras.perspective;
             break;
         case 54: //6
             // toggle wireframe for every material
