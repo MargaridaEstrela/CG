@@ -58,7 +58,7 @@ function createRobot(x, y, z){
 
     var robot = new THREE.Object3D();
 
-    addHead(robot, 1, 1, 1);
+    addAbdomen(robot, 0, 0, 0);
 
     scene.add(robot);
 
@@ -67,44 +67,6 @@ function createRobot(x, y, z){
     robot.position.z = z;
 }
 
-function addHead(obj, x, y, z){
-    'use strict';
-
-    var head = new THREE.Object3D();
-
-    geometry = new THREE.BoxGeometry(4, 4, 4);
-    mesh = new THREE.Mesh(geometry, materials.default);
-
-    head.add(mesh);
-    head.position.set(x, y, z);
-
-    // Calculate the offset to move the head so that its center aligns with the origin
-    var headOffset = new THREE.Vector3(2, 0, 2);
-    head.position.sub(headOffset);
-
-    addEye(head, 1, 2, 4);
-    addEye(head, 3, 2, 4);
-    addAntenna(head, 6.5, 8, 4);
-    addAntenna(head, 4, 8, 4);
-
-    obj.add(head);
-}
-
-function addEye(obj, x, y, z){
-    'use strict';
-    geometry = new THREE.BoxGeometry(1, 1, 0.5);
-    mesh = new THREE.Mesh(geometry, materials.default);
-    mesh.position.set(x, y, z);
-    obj.add(mesh);
-}
-
-function addAntenna(obj, x, y, z){
-    'use strict';
-    geometry = new THREE.BoxGeometry(1, 2, 1);
-    mesh = new THREE.Mesh(geometry, materials.default);
-    mesh.position.set(x, y, z);
-    obj.add(mesh);
-}
 
 function createTrailer(x, y, z) {
     'use strict';
