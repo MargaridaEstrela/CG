@@ -28,8 +28,8 @@ function addTrailerUnder(obj, x, y, z){
     'use strict';
 
     var trailerUnderWidth = 12;
-    var trailerUnderHeight = 5;
-    var trailerUnderLength = 25;
+    var trailerUnderHeight = 8;
+    var trailerUnderLength = 30;
 
     geometry = new THREE.BoxGeometry(trailerUnderWidth, trailerUnderHeight, trailerUnderLength);
 

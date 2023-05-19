@@ -10,6 +10,7 @@ function addHead(obj, x, y, z){
     'use strict';
 
     var head = new THREE.Object3D();
+	head.name = 'Head';
 
     geometry = new THREE.BoxGeometry(4, 4, 4);
     mesh = new THREE.Mesh(geometry, materials.blue);
@@ -72,8 +73,14 @@ function addUpperArm(obj, x, y, z){
     'use strict';
 
     var upperArm = new THREE.Object3D();
+    if (x > 0) {
+	    upperArm.name = 'rArm';
+    }
+    else {
+	    upperArm.name = 'lArm';
+    }
 
-    geometry = new THREE.BoxGeometry(3, 6, 3);
+    geometry = new THREE.BoxGeometry(3.25, 6, 3);
     mesh = new THREE.Mesh(geometry, materials.default);
 
     upperArm.add(mesh);
@@ -147,8 +154,8 @@ function addWaist(obj, x, y, z){
 
 	addThigh(waist,3.5,0,-1);
 	addThigh(waist,-3.5,0,-1);
-    addWheel(waist, 7, 3, 0, 0, 0, Math.PI/2);
-    addWheel(waist, -7, 3, 0, 0, 0, Math.PI/2);
+    addWheel(waist, 7, 0, 0, 0, 0, Math.PI/2);
+    addWheel(waist, -7, 0, 0, 0, 0, Math.PI/2);
 }
 
 function addThigh(obj, x, y, z){
@@ -156,6 +163,13 @@ function addThigh(obj, x, y, z){
 	
 	var thigh = new THREE.Object3D();
 	var sign = Math.sign(x);
+
+	if (x > 0) {
+		thigh.name = 'rThigh';
+	}
+	else {
+		thigh.name = 'lThigh';
+	}
 
 	geometry = new THREE.BoxGeometry(2,5,2);
 	mesh = new THREE.Mesh(geometry, materials.metalic);
@@ -187,8 +201,8 @@ function addLeg(obj, x, y, z){
 
 	obj.add(leg);
 
-	addWheel(leg,sign * 3,14,0,0,0,Math.PI/2);
-	addWheel(leg,sign * 3,4,0,0,0,Math.PI/2);
+	addWheel(leg,sign * 3,14,-1,0,0,Math.PI/2);
+	addWheel(leg,sign * 3,4,-1,0,0,Math.PI/2);
 	addFoot(leg,0, 0, 2);
 }
 
@@ -197,7 +211,12 @@ function addFoot(obj, x, y, z){
 	'use strict';
 
 	var foot = new THREE.Object3D();
-	var sign = Math.sign(x);
+	if (obj.position.x > 0) {
+		foot.name = 'rFoot';
+	}
+	else {
+		foot.name = 'lFoot';
+	}
 
 	geometry = new THREE.BoxGeometry(4,4,6);
 	mesh = new THREE.Mesh(geometry, materials.blue);
@@ -210,6 +229,75 @@ function addFoot(obj, x, y, z){
 	obj.add(foot);
 
 }
-
-
+    
+function updateRobot() {
+	if (qPressed) {
+		if (robotState[3]<41) {
+			var lFoot = robot.getObjectByName('lFoot');
+			var rFoot = robot.getObjectByName('rFoot');
+			lFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
+			rFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
+			robotState[3] += 1;
+		}
+	}
+	if (aPressed) {
+		if (robotState[3] > 0) {
+			robotState[3] -= 1;
+			var lFoot = robot.getObjectByName('lFoot');
+			var rFoot = robot.getObjectByName('rFoot');
+			lFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
+			rFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
+		}
+	}
+	if (wPressed) {
+		if (robotState[2] < 21) {
+			var lThigh = robot.getObjectByName('lThigh');
+			var rThigh = robot.getObjectByName('rThigh');
+			lThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+			rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+			robotState[2] += 1;
+		}
+	}
+	if (sPressed) {
+                if (robotState[2] > 0) {
+			robotState[2] -= 1;
+                        var lThigh = robot.getObjectByName('lThigh');
+                        var rThigh = robot.getObjectByName('rThigh');
+                        lThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+                        rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+                }
+	}
+	if (ePressed) {
+                if (robotState[1] < 12) {
+                        var lArm = robot.getObjectByName('lArm');
+                        var rArm = robot.getObjectByName('rArm');
+                        lArm.position.x += armSpeed * robotState[1];
+                        rArm.position.x -= armSpeed * robotState[1];
+                        robotState[1] += 1;
+                }
+        }
+	if (dPressed) {
+                if (robotState[1] > 0) {
+			robotState[1] -= 1;
+                        var lArm = robot.getObjectByName('lArm');
+                        var rArm = robot.getObjectByName('rArm');
+                        lArm.position.x -= armSpeed * robotState[1];
+                        rArm.position.x += armSpeed * robotState[1];
+                }
+        }
+	if (rPressed) {
+                if (robotState[0] < 41) {
+                        var head = robot.getObjectByName('Head');
+                        head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
+                        robotState[0] += 1;
+                }
+        }
+	if (fPressed) {
+                if (robotState[0] > 0) {
+			robotState[0] -= 1;
+                        var head = robot.getObjectByName('Head');
+                        head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
+                }
+        }
+}
 

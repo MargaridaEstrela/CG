@@ -12,6 +12,20 @@ var trailerMovingRight = false;
 var trailerMovingForward = false;
 var trailerMovingBackward = false;
 
+//Robot
+var robot;
+var robotState = [0,0,0,0]; //1 - Head, 2 - Arms, 3 - Thighs, 4 - Feet
+var armSpeed = 0.05;
+var rotationSpeed = 0.025;
+var qPressed = false;
+var aPressed = false;
+var wPressed = false;
+var sPressed = false;
+var ePressed = false;
+var dPressed = false;
+var rPressed = false;
+var fPressed = false;
+
 var camera, renderer, scene;
 var geometry, mesh;
 
@@ -31,7 +45,7 @@ function createScene(){
     
     materials.default = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-    createTrailer(0, 12.5, -20);
+    createTrailer(0, 9, -25);
     createRobot(0, 20, 20);
 }
 
@@ -56,7 +70,7 @@ function createCameras() {
 function createRobot(x, y, z){
     'use strict';
 
-    var robot = new THREE.Object3D();
+    robot = new THREE.Object3D();
 	createRobotMaterials();
 
     addAbdomen(robot, 0, 0, 0);
@@ -76,9 +90,9 @@ function createTrailer(x, y, z) {
 
     createTrailerMaterials();
 
-    addTrailerBase(trailer, 0, 9, 2.5);
-    addTrailerUnder(trailer, 0, 4, -7.5);
-    addTrailerConnector(trailer, 0, 9, 27);
+    addTrailerBase(trailer, 0, 10, 2.5);
+    addTrailerUnder(trailer, 0, 2, -5);
+    addTrailerConnector(trailer, 0, 10, 27);
     // add a wheel standing on the ground
     addWheel(trailer, 7, 4.5, -15, 0, 0, Math.PI / 2);
     addWheel(trailer, 7, 4.5, -5, 0, 0, Math.PI / 2);
@@ -116,6 +130,7 @@ function update(){
     'use strict';
 
     updateTrailerPosition();
+    updateRobot();
 }
 
 /////////////
@@ -216,6 +231,30 @@ function onKeyDown(e) {
                 materials[material].wireframe = !materials[material].wireframe;
             }
             break;
+		case 65: //a
+			aPressed = true;
+			break;
+		case 68: //d
+			dPressed = true;
+		    	break;
+		case 69: //e
+			ePressed = true;
+			break;
+		case 70: //f
+			fPressed = true;
+			break;
+		case 81: //q
+			qPressed = true;
+			break;
+		case 82: //r
+		    	rPressed = true;
+		    	break;
+		case 83: //s;
+			sPressed = true;
+			break;
+		case 87: //w
+			wPressed = true;
+			break;
     }
 }
 
@@ -237,6 +276,30 @@ function onKeyUp(e){
             break;
         case 40: //down
             trailerMovingBackward = false;
+            break;
+		case 65: //a
+            aPressed = false;
+            break;
+        case 68: //d
+            dPressed = false;
+	    break;
+        case 69: //e
+            ePressed = false;
+            break;
+        case 70: //f
+            fPressed = false;
+            break;
+        case 81: //q
+            qPressed = false;
+            break;
+	case 82: //r
+	    rPressed = false;
+	    break;
+        case 83: //s;
+            sPressed = false;
+            break;
+        case 87: //w
+            wPressed = false;
             break;
     }
 }
