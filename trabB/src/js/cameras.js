@@ -39,17 +39,17 @@ function createCameraSide() {
 function createCameraTop() {
 
     cameras.top = new THREE.OrthographicCamera(
-        window.innerWidth / -20,
-        window.innerWidth / 20,
-        window.innerHeight / 20,
-        window.innerHeight / -20,
+        window.innerWidth / -15,
+        window.innerWidth / 15,
+        window.innerHeight / 15,
+        window.innerHeight / -15,
         -1000,
         1000,
     )
 
 
     cameras.top.position.x = 0;
-    cameras.top.position.y = 40;
+    cameras.top.position.y = 20;
     cameras.top.position.z = 0;
     cameras.top.lookAt(0, 0, 0);
 }
@@ -57,10 +57,10 @@ function createCameraTop() {
 function createCameraOrthographic() {
     
     cameras.ortographic = new THREE.OrthographicCamera(
-        window.innerWidth / -20,
-        window.innerWidth / 20,
-        window.innerHeight / 20,
-        window.innerHeight / -20,
+        window.innerWidth / -15,
+        window.innerWidth / 15,
+        window.innerHeight / 15,
+        window.innerHeight / -15,
         -1000,
         1000,
     )

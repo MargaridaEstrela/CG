@@ -31,8 +31,8 @@ function createScene(){
     
     materials.default = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-    createTrailer(0, 0, -30);
-    createRobot(0, 20, 0);
+    createTrailer(0, 12.5, -20);
+    createRobot(0, 20, 20);
 }
 
 //////////////////////
@@ -57,6 +57,7 @@ function createRobot(x, y, z){
     'use strict';
 
     var robot = new THREE.Object3D();
+	createRobotMaterials();
 
     addAbdomen(robot, 0, 0, 0);
 
@@ -75,14 +76,14 @@ function createTrailer(x, y, z) {
 
     createTrailerMaterials();
 
-    addTrailerBase(trailer, 0, 9, 0);
-    addTrailerUnder(trailer, 0, 4, -4);
-    addTrailerConnector(trailer, 0, 9, 22);
+    addTrailerBase(trailer, 0, 9, 2.5);
+    addTrailerUnder(trailer, 0, 4, -7.5);
+    addTrailerConnector(trailer, 0, 9, 27);
     // add a wheel standing on the ground
-    addWheel(trailer, 7, 4, -15, 0, 0, Math.PI / 2);
-    addWheel(trailer, 7, 4, -5, 0, 0, Math.PI / 2);
-    addWheel(trailer, -7, 4, -15, 0, 0, Math.PI / 2);
-    addWheel(trailer, -7, 4, -5, 0, 0, Math.PI / 2);
+    addWheel(trailer, 7, 4.5, -15, 0, 0, Math.PI / 2);
+    addWheel(trailer, 7, 4.5, -5, 0, 0, Math.PI / 2);
+    addWheel(trailer, -7, 4.5, -15, 0, 0, Math.PI / 2);
+    addWheel(trailer, -7, 4.5, -5, 0, 0, Math.PI / 2);
 
     scene.add(trailer);
 
