@@ -137,6 +137,71 @@ function addWaist(obj, x, y, z){
 
     obj.add(waist);
 
+	addThigh(waist,2,0,-1);
+	addThigh(waist,-2,0,-1);
     addWheel(waist, 7, 3, 0, 0, 0, Math.PI/2);
     addWheel(waist, -7, 3, 0, 0, 0, Math.PI/2);
 }
+
+function addThigh(obj, x, y, z){
+	'use strict';
+	
+	var thigh = new THREE.Object3D();
+	var sign = Math.sign(x);
+
+	geometry = new THREE.BoxGeometry(2,5,2);
+	mesh = new THREE.Mesh(geometry, materials.default);
+
+	thigh.add(mesh);
+	thigh.position.set(x, y, z);
+
+	geometry.translate(0,-2.5,1);
+
+	obj.add(thigh);
+
+	addLeg(thigh,sign * 0.25,-25,1);
+
+}
+
+function addLeg(obj, x, y, z){
+	'use strict';
+
+	var leg = new THREE.Object3D();
+	var sign = Math.sign(x);
+
+	geometry = new THREE.BoxGeometry(4,20,4);
+	mesh = new THREE.Mesh(geometry, materials.default);
+
+	leg.add(mesh);
+	leg.position.set(x,y,z);
+
+	geometry.translate(0,10,0);
+
+	obj.add(leg);
+
+	addWheel(leg,sign * 3,14,0,0,0,Math.PI/2);
+	addWheel(leg,sign * 3,4,0,0,0,Math.PI/2);
+	addFoot(leg,0, 0, 2);
+}
+
+
+function addFoot(obj, x, y, z){
+	'use strict';
+
+	var foot = new THREE.Object3D();
+	var sign = Math.sign(x);
+
+	geometry = new THREE.BoxGeometry(4,4,6);
+	mesh = new THREE.Mesh(geometry, materials.default);
+
+	foot.add(mesh);
+	foot.position.set(x, y, z);
+
+	geometry.translate(0,2,3)
+
+	obj.add(foot);
+
+}
+
+
+

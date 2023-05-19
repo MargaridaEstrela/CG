@@ -31,8 +31,8 @@ function createScene(){
     
     materials.default = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-    createRobot(0, 0, 0);
     createTrailer(0, 0, -30);
+    createRobot(0, 20, 0);
 }
 
 //////////////////////
