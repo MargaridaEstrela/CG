@@ -9,13 +9,13 @@ function createTrailerMaterials() {
 function addTrailerBase(obj, x, y, z) {
     'use strict';
 
-    var trailerWidth = 16;
-    var trailerHeight = 15;
-    var trailerLength = 45;
+    var trailerBaseWidth = 16;
+    var trailerBaseHeight = 15;
+    var trailerBaseLength = 45;
 
-    const geometry = new THREE.BoxGeometry(trailerWidth, trailerHeight, trailerLength);
+    const geometry = new THREE.BoxGeometry(trailerBaseWidth, trailerBaseHeight, trailerBaseLength);
 
-    const offsetY = trailerHeight / 2;
+    const offsetY = trailerBaseHeight / 2;
     geometry.translate(0, offsetY, 0);
 
     const mesh = new THREE.Mesh(geometry, materials.trailer);

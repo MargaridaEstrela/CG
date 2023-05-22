@@ -7,6 +7,10 @@ var cameras = {};
 // Trailer
 var trailer;
 var trailerSpeed = 0.3;
+var trailerWidth = 16;
+var trailerLength = 49;
+var trailerFrontDist = 22.5 + 4;
+var trailerBackDist = 22.5;
 var trailerMovingLeft = false;
 var trailerMovingRight = false;
 var trailerMovingForward = false;
@@ -17,6 +21,9 @@ var robot;
 var robotState = [0,0,0,0]; //1 - Head, 2 - Arms, 3 - Thighs, 4 - Feet
 var armSpeed = 0.05;
 var rotationSpeed = 0.025;
+var robotWidth = 22.5;
+var robotFrontDist = 5;
+var robotBackDist = 30;
 var qPressed = false;
 var aPressed = false;
 var wPressed = false;
@@ -26,6 +33,12 @@ var dPressed = false;
 var rPressed = false;
 var fPressed = false;
 
+//Colisions
+var robotAABB, trailerAABB;
+var colisionON = false;
+var locked = false;
+
+//General
 var camera, renderer, scene;
 var geometry, mesh;
 
@@ -45,7 +58,7 @@ function createScene(){
     
     materials.default = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-    createTrailer(0, 9, -25);
+    createTrailer(30, 9, -50);
     createRobot(0, 20, 20);
 }
 
@@ -104,7 +117,6 @@ function createTrailer(x, y, z) {
     trailer.position.x = x;
     trailer.position.y = y;
     trailer.position.z = z;
-
 }
 
 //////////////////////
@@ -113,6 +125,35 @@ function createTrailer(x, y, z) {
 function checkCollisions(){
     'use strict';
 
+    var robotXmin = robot.position.x - robotWidth / 2;
+    var robotXmax = robot.position.x + robotWidth / 2;
+    var robotZmin = robot.position.z - robotBackDist;
+    var robotZmax = robot.position.z + robotFrontDist;
+
+    const geometry = new THREE.BoxGeometry(robotXmax - robotXmin, 9, robotZmax - robotZmin);
+    const mesh = new THREE.Mesh(geometry, materials.trailer);
+    mesh.position.set(robot.position.x, robot.position.y, robot.position.z);
+    scene.add(mesh);
+
+    var trailerXmin = robot.position.x - trailerWidth / 2;
+    var trailerXmax = robot.position.x + trailerWidth / 2;
+    var trailerZmin = robot.position.z - trailerBackDist;
+    var trailerZmax = robot.position.z + trailerFrontDist;
+
+    const geometry1 = new THREE.BoxGeometry(trailerXmax - trailerXmin, 9, trailerZmax - trailerZmin);
+    const mesh1 = new THREE.Mesh(geometry1, materials.trailer);
+    mesh1.position.set(trailer.position.x, trailer.position.y, trailer.position.z);
+    //scene.add(mesh1);
+
+    var colisionLeft1 = trailerXmax <= robotXmax && trailerXmax >= robotXmin &&
+                        (trailerZmax >= robotZmin && trailerZmax <= robotZmax || trailerZmin <= robotZmax);
+
+    colisionON = (trailerXmin <= robotXmax || trailerXmax >= trailerXmin) &&
+                (trailerZmax >= robotZmin || trailerZmin <= robotZmax);
+
+    if (colisionON) {
+        handleCollisions();
+    }
 }
 
 ///////////////////////
@@ -121,6 +162,17 @@ function checkCollisions(){
 function handleCollisions(){
     'use strict';
 
+    desactivateInput();
+    startAnimation();
+}
+
+/////////////////////
+/* START ANIMATION */
+/////////////////////
+function startAnimation(){
+    'use strict';
+
+    trailer.position.set(0, 9, -20);
 }
 
 ////////////
@@ -131,6 +183,8 @@ function update(){
 
     updateTrailerPosition();
     updateRobot();
+
+    checkCollisions();
 }
 
 /////////////
@@ -176,6 +230,8 @@ function animate() {
 
     requestAnimationFrame(animate);
 
+    colisionON = false;
+    locked = true;
 }
 
 ////////////////////////////
@@ -196,6 +252,10 @@ function onResize() {
 ///////////////////////
 function onKeyDown(e) {
     'use strict';
+
+    if (colisionON) {
+        return;
+    }
 
     switch (e.keyCode) {
         case 37: //left
@@ -302,4 +362,26 @@ function onKeyUp(e){
             wPressed = false;
             break;
     }
+}
+
+///////////////////////
+/* DESACTIVATE INPUT */
+///////////////////////
+function desactivateInput() {
+
+    //Trailer
+    trailerMovingLeft = false;
+    trailerMovingRight = false;
+    trailerMovingForward = false;
+    trailerMovingBackward = false;
+
+    //Commands
+    qPressed = false;
+    aPressed = false;
+    wPressed = false;
+    sPressed = false;
+    ePressed = false;
+    dPressed = false;
+    rPressed = false;
+    fPressed = false;
 }
