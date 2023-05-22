@@ -37,6 +37,8 @@ var fPressed = false;
 var robotAABB, trailerAABB;
 var colisionON = false;
 var locked = false;
+var ongoingAnim = false;
+var truck = false;
 
 //General
 var camera, renderer, scene;
@@ -107,10 +109,10 @@ function createTrailer(x, y, z) {
     addTrailerUnder(trailer, 0, 2, -5);
     addTrailerConnector(trailer, 0, 10, 27);
     // add a wheel standing on the ground
-    addWheel(trailer, 7, 4.5, -15, 0, 0, Math.PI / 2);
-    addWheel(trailer, 7, 4.5, -5, 0, 0, Math.PI / 2);
-    addWheel(trailer, -7, 4.5, -15, 0, 0, Math.PI / 2);
-    addWheel(trailer, -7, 4.5, -5, 0, 0, Math.PI / 2);
+    addWheel(trailer, 7, 5, -15, 0, 0, Math.PI / 2);
+    addWheel(trailer, 7, 5, -5, 0, 0, Math.PI / 2);
+    addWheel(trailer, -7, 5, -15, 0, 0, Math.PI / 2);
+    addWheel(trailer, -7, 5, -5, 0, 0, Math.PI / 2);
 
     scene.add(trailer);
 
@@ -119,60 +121,78 @@ function createTrailer(x, y, z) {
     trailer.position.z = z;
 }
 
+function updateRobotState() {
+	if (robotState[0] == 41 && robotState[1] == 12 && robotState[2] == 21 && robotState[3] == 41) {
+		truck = true;
+	}
+	else {
+		truck = false;
+	}
+}
+
 //////////////////////
 /* CHECK COLLISIONS */
 //////////////////////
 function checkCollisions(){
     'use strict';
 
+	if(!truck || ongoingAnim) { return; }
+
     var robotXmin = robot.position.x - robotWidth / 2;
     var robotXmax = robot.position.x + robotWidth / 2;
     var robotZmin = robot.position.z - robotBackDist;
     var robotZmax = robot.position.z + robotFrontDist;
 
-    const geometry = new THREE.BoxGeometry(robotXmax - robotXmin, 9, robotZmax - robotZmin);
-    const mesh = new THREE.Mesh(geometry, materials.trailer);
-    mesh.position.set(robot.position.x, robot.position.y, robot.position.z);
-    scene.add(mesh);
+    var trailerXmin = trailer.position.x - trailerWidth / 2;
+    var trailerXmax = trailer.position.x + trailerWidth / 2;
+    var trailerZmin = trailer.position.z - trailerBackDist;
+    var trailerZmax = trailer.position.z + trailerFrontDist;
 
-    var trailerXmin = robot.position.x - trailerWidth / 2;
-    var trailerXmax = robot.position.x + trailerWidth / 2;
-    var trailerZmin = robot.position.z - trailerBackDist;
-    var trailerZmax = robot.position.z + trailerFrontDist;
+    var boundXmin = (trailerXmin >= robotXmin) && (trailerXmin <= robotXmax);
+	var boundXmax = (trailerXmax >= robotXmin) && (trailerXmax <= robotXmax);
+	var boundZmin = (trailerZmin >= robotZmin) && (trailerZmin <= robotZmax);
+    var boundZmax = (trailerZmax >= robotZmin) && (trailerZmax <= robotZmax);  
+	var containedX = (trailerXmin <= robotXmin) && (trailerXmax >= robotXmax);
+	var containedZ = (trailerZmin <= robotZmin) && (trailerZmax >= robotZmax);
+	var contained = (containedX && (boundZmin || boundZmax)) || (containedZ && (boundXmin || boundXmax));
 
-    const geometry1 = new THREE.BoxGeometry(trailerXmax - trailerXmin, 9, trailerZmax - trailerZmin);
-    const mesh1 = new THREE.Mesh(geometry1, materials.trailer);
-    mesh1.position.set(trailer.position.x, trailer.position.y, trailer.position.z);
-    //scene.add(mesh1);
+    colisionON = (boundXmin || boundXmax) &&
+                (boundZmin || boundZmax) || contained;
 
-    var colisionLeft1 = trailerXmax <= robotXmax && trailerXmax >= robotXmin &&
-                        (trailerZmax >= robotZmin && trailerZmax <= robotZmax || trailerZmin <= robotZmax);
-
-    colisionON = (trailerXmin <= robotXmax || trailerXmax >= trailerXmin) &&
-                (trailerZmax >= robotZmin || trailerZmin <= robotZmax);
-
-    if (colisionON) {
-        handleCollisions();
+    if (colisionON == true && locked == false) {
+		ongoingAnim = true;
+       	desactivateInput();
     }
-}
 
-///////////////////////
-/* HANDLE COLLISIONS */
-///////////////////////
-function handleCollisions(){
-    'use strict';
-
-    desactivateInput();
-    startAnimation();
+	else if (colisionON == false && locked == true) {
+		locked = false;
+	}
 }
 
 /////////////////////
 /* START ANIMATION */
 /////////////////////
-function startAnimation(){
-    'use strict';
 
-    trailer.position.set(0, 9, -20);
+function updateAnimation(){
+    'use strict';
+	if (!ongoingAnim) { return; }
+	var xDest = 0 - trailer.position.x;
+	var xOrientation = Math.sign(xDest); 
+	var zDest = -20 - trailer.position.z;
+	var zOrientation= Math.sign(zDest);
+	if (Math.abs(xDest) > trailerSpeed) {
+		xDest = Math.sign(xDest) * trailerSpeed;
+	}
+	if (Math.abs(zDest) > trailerSpeed) {
+		zDest = Math.sign(zDest) * trailerSpeed;
+	}
+	if (xDest == 0 && zDest == 0) {
+		ongoingAnim = false;
+		locked = true;
+	}
+	else {
+		trailer.position.set(trailer.position.x + xDest, trailer.position.y, trailer.position.z + zDest);
+	}
 }
 
 ////////////
@@ -183,8 +203,10 @@ function update(){
 
     updateTrailerPosition();
     updateRobot();
+	updateRobotState();
 
     checkCollisions();
+	updateAnimation();
 }
 
 /////////////
@@ -229,9 +251,6 @@ function animate() {
     render();
 
     requestAnimationFrame(animate);
-
-    colisionON = false;
-    locked = true;
 }
 
 ////////////////////////////
@@ -253,7 +272,7 @@ function onResize() {
 function onKeyDown(e) {
     'use strict';
 
-    if (colisionON) {
+    if (ongoingAnim) {
         return;
     }
 
@@ -324,6 +343,7 @@ function onKeyDown(e) {
 function onKeyUp(e){
     'use strict';
 
+	if (ongoingAnim) { return; }
     switch (e.keyCode) {
         case 37: //left
             trailerMovingLeft = false;
