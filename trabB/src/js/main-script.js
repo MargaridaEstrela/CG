@@ -156,12 +156,11 @@ function checkCollisions(){
 	var containedZ = (trailerZmin <= robotZmin) && (trailerZmax >= robotZmax);
 	var contained = (containedX && (boundZmin || boundZmax)) || (containedZ && (boundXmin || boundXmax));
 
-    colisionON = (boundXmin || boundXmax) &&
-                (boundZmin || boundZmax) || contained;
+    colisionON = (boundXmin || boundXmax) && (boundZmin || boundZmax) || contained;
 
     if (colisionON == true && locked == false) {
 		ongoingAnim = true;
-       	desactivateInput();
+       	deactivateInput();
     }
 
 	else if (colisionON == false && locked == true) {
@@ -315,7 +314,7 @@ function onKeyDown(e) {
 			break;
 		case 68: //d
 			dPressed = true;
-		    	break;
+		    break;
 		case 69: //e
 			ePressed = true;
 			break;
@@ -326,8 +325,8 @@ function onKeyDown(e) {
 			qPressed = true;
 			break;
 		case 82: //r
-		    	rPressed = true;
-		    	break;
+		    rPressed = true;
+		    break;
 		case 83: //s;
 			sPressed = true;
 			break;
@@ -343,7 +342,10 @@ function onKeyDown(e) {
 function onKeyUp(e){
     'use strict';
 
-	if (ongoingAnim) { return; }
+	if (ongoingAnim) { 
+        return; 
+    }
+
     switch (e.keyCode) {
         case 37: //left
             trailerMovingLeft = false;
@@ -362,7 +364,7 @@ function onKeyUp(e){
             break;
         case 68: //d
             dPressed = false;
-	    break;
+	        break;
         case 69: //e
             ePressed = false;
             break;
@@ -372,9 +374,9 @@ function onKeyUp(e){
         case 81: //q
             qPressed = false;
             break;
-	case 82: //r
-	    rPressed = false;
-	    break;
+	    case 82: //r
+	        rPressed = false;
+	        break;
         case 83: //s;
             sPressed = false;
             break;
@@ -385,9 +387,9 @@ function onKeyUp(e){
 }
 
 ///////////////////////
-/* DESACTIVATE INPUT */
+/* DEACTIVATE INPUT */
 ///////////////////////
-function desactivateInput() {
+function deactivateInput() {
 
     //Trailer
     trailerMovingLeft = false;

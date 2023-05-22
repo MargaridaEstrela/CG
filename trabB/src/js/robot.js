@@ -259,45 +259,45 @@ function updateRobot() {
 		}
 	}
 	if (sPressed) {
-                if (robotState[2] > 0) {
+        if (robotState[2] > 0) {
 			robotState[2] -= 1;
-                        var lThigh = robot.getObjectByName('lThigh');
-                        var rThigh = robot.getObjectByName('rThigh');
-                        lThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
-                        rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
-                }
+            var lThigh = robot.getObjectByName('lThigh');
+            var rThigh = robot.getObjectByName('rThigh');
+            lThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+            rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+        }
 	}
 	if (ePressed) {
-                if (robotState[1] < 12) {
-                        var lArm = robot.getObjectByName('lArm');
-                        var rArm = robot.getObjectByName('rArm');
-                        lArm.position.x += armSpeed * robotState[1];
-                        rArm.position.x -= armSpeed * robotState[1];
-                        robotState[1] += 1;
-                }
+        if (robotState[1] < 12) {
+            var lArm = robot.getObjectByName('lArm');
+            var rArm = robot.getObjectByName('rArm');
+            lArm.position.x += armSpeed * robotState[1];
+            rArm.position.x -= armSpeed * robotState[1];
+            robotState[1] += 1;
         }
+    }
 	if (dPressed) {
-                if (robotState[1] > 0) {
+        if (robotState[1] > 0) {
 			robotState[1] -= 1;
-                        var lArm = robot.getObjectByName('lArm');
-                        var rArm = robot.getObjectByName('rArm');
-                        lArm.position.x -= armSpeed * robotState[1];
-                        rArm.position.x += armSpeed * robotState[1];
-                }
+            var lArm = robot.getObjectByName('lArm');
+            var rArm = robot.getObjectByName('rArm');
+            lArm.position.x -= armSpeed * robotState[1];
+            rArm.position.x += armSpeed * robotState[1];
         }
+    }
 	if (rPressed) {
-                if (robotState[0] < 41) {
-                        var head = robot.getObjectByName('Head');
-                        head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
-                        robotState[0] += 1;
-                }
+        if (robotState[0] < 41) {
+            var head = robot.getObjectByName('Head');
+            head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
+            robotState[0] += 1;
         }
+    }
 	if (fPressed) {
-                if (robotState[0] > 0) {
+        if (robotState[0] > 0) {
 			robotState[0] -= 1;
-                        var head = robot.getObjectByName('Head');
-                        head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
-                }
+            var head = robot.getObjectByName('Head');
+            head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
         }
+    }
 }
 
