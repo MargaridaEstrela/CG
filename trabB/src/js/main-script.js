@@ -21,9 +21,9 @@ var robot;
 var robotState = [0,0,0,0]; //1 - Head, 2 - Arms, 3 - Thighs, 4 - Feet
 var armSpeed = 0.05;
 var rotationSpeed = 0.025;
-var robotWidth = 22.5;
-var robotFrontDist = 5;
-var robotBackDist = 30;
+var robotWidth = 17;
+var robotFrontDist = 3;
+var robotBackDist = 33;
 var qPressed = false;
 var aPressed = false;
 var wPressed = false;
@@ -127,6 +127,7 @@ function updateRobotState() {
 	}
 	else {
 		truck = false;
+		locked = false;
 	}
 }
 
