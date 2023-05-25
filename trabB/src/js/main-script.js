@@ -48,7 +48,7 @@ function createScene(){
     
     materials.default = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-    createTrailer(30, 9, -50);
+    createTrailer(0, 9, -50);
     createRobot(0, 20, 20);
 }
 
@@ -110,7 +110,7 @@ function createTrailer(x, y, z) {
 }
 
 function updateRobotState() {
-	if (robotState[0] == 41 && robotState[1] == 12 && robotState[2] == 21 && robotState[3] == 41) {
+	if (robotState[0] == 40 && robotState[1] == 12 && robotState[2] == 20 && robotState[3] == 40) {
 		truck = true;
 	}
 	else {

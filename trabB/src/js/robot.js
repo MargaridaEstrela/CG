@@ -229,75 +229,68 @@ function addFoot(obj, x, y, z){
 	obj.add(foot);
 
 }
-    
+
+function updateFeet() {
+	var lFoot = robot.getObjectByName('lFoot');
+    var rFoot = robot.getObjectByName('rFoot');
+    lFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
+    rFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
+}
+
+function updateThighs() {
+    var lThigh = robot.getObjectByName('lThigh');
+    var rThigh = robot.getObjectByName('rThigh');
+    lThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+    rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
+}
+
+function updateArms(direction) {
+    var lArm = robot.getObjectByName('lArm');
+    var rArm = robot.getObjectByName('rArm');
+	if (direction == 1) {
+    	lArm.position.x += armSpeed * robotState[1];
+    	rArm.position.x -= armSpeed * robotState[1];
+	}
+	else {
+		lArm.position.x -= armSpeed * robotState[1];
+		rArm.position.x += armSpeed * robotState[1];
+	}
+}
+
+function updateHead() {
+    var head = robot.getObjectByName('Head');
+    head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
+}
+
 function updateRobot() {
-	if (keysPressed.q) {
-		if (robotState[3]<41) {
-			var lFoot = robot.getObjectByName('lFoot');
-			var rFoot = robot.getObjectByName('rFoot');
-			lFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
-			rFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
-			robotState[3] += 1;
-		}
+	if (keysPressed.q && robotState[3] < 40) {
+		robotState[3] += 1;
 	}
-	if (keysPressed.a) {
-		if (robotState[3] > 0) {
-			robotState[3] -= 1;
-			var lFoot = robot.getObjectByName('lFoot');
-			var rFoot = robot.getObjectByName('rFoot');
-			lFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
-			rFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
-		}
+	if (keysPressed.a && robotState[3] > 0) {
+		robotState[3] -= 1;
 	}
-	if (keysPressed.w) {
-		if (robotState[2] < 21) {
-			var lThigh = robot.getObjectByName('lThigh');
-			var rThigh = robot.getObjectByName('rThigh');
-			lThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
-			rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
-			robotState[2] += 1;
-		}
+	if (keysPressed.w && robotState[2] < 20) {
+		robotState[2] += 1;
 	}
-	if (keysPressed.s) {
-        if (robotState[2] > 0) {
-			robotState[2] -= 1;
-            var lThigh = robot.getObjectByName('lThigh');
-            var rThigh = robot.getObjectByName('rThigh');
-            lThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
-            rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
-        }
+	if (keysPressed.s && robotState[2] > 0) {
+		robotState[2] -= 1;
 	}
-	if (keysPressed.e) {
-        if (robotState[1] < 12) {
-            var lArm = robot.getObjectByName('lArm');
-            var rArm = robot.getObjectByName('rArm');
-            lArm.position.x += armSpeed * robotState[1];
-            rArm.position.x -= armSpeed * robotState[1];
-            robotState[1] += 1;
-        }
+	if (keysPressed.e && robotState[1] < 12) {
+        updateArms(1);
+		robotState[1] += 1;
     }
-	if (keysPressed.d) {
-        if (robotState[1] > 0) {
-			robotState[1] -= 1;
-            var lArm = robot.getObjectByName('lArm');
-            var rArm = robot.getObjectByName('rArm');
-            lArm.position.x -= armSpeed * robotState[1];
-            rArm.position.x += armSpeed * robotState[1];
-        }
+	if (keysPressed.d && robotState[1] > 0) {
+		robotState[1] -= 1;
+		updateArms(-1);
     }
-	if (keysPressed.r) {
-        if (robotState[0] < 41) {
-            var head = robot.getObjectByName('Head');
-            head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
-            robotState[0] += 1;
-        }
+	if (keysPressed.r && robotState[0] < 40) {
+        robotState[0] += 1;
     }
-	if (keysPressed.f) {
-        if (robotState[0] > 0) {
-			robotState[0] -= 1;
-            var head = robot.getObjectByName('Head');
-            head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
-        }
+	if (keysPressed.f && robotState[0] > 0){
+		robotState[0] -= 1;
     }
+	updateFeet();
+	updateThighs();
+	updateHead();
 }
 
