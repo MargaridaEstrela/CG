@@ -1,8 +1,14 @@
 //////////////////////
 /* GLOBAL VARIABLES */
 //////////////////////
-// Cameras
+
+//General
+var camera, renderer, scene;
+var geometry, mesh;
+
+var materials = {};
 var cameras = {};
+var keysPressed = {};
 
 // Trailer
 var trailer;
@@ -11,10 +17,6 @@ var trailerWidth = 16;
 var trailerLength = 49;
 var trailerFrontDist = 22.5 + 4;
 var trailerBackDist = 22.5;
-var trailerMovingLeft = false;
-var trailerMovingRight = false;
-var trailerMovingForward = false;
-var trailerMovingBackward = false;
 
 //Robot
 var robot;
@@ -24,14 +26,6 @@ var rotationSpeed = 0.025;
 var robotWidth = 22.5;
 var robotFrontDist = 5;
 var robotBackDist = 30;
-var qPressed = false;
-var aPressed = false;
-var wPressed = false;
-var sPressed = false;
-var ePressed = false;
-var dPressed = false;
-var rPressed = false;
-var fPressed = false;
 
 //Colisions
 var robotAABB, trailerAABB;
@@ -39,12 +33,6 @@ var colisionON = false;
 var locked = false;
 var ongoingAnim = false;
 var truck = false;
-
-//General
-var camera, renderer, scene;
-var geometry, mesh;
-
-var materials = {};
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -277,16 +265,16 @@ function onKeyDown(e) {
 
     switch (e.keyCode) {
         case 37: //left
-            trailerMovingLeft = true;
+            keysPressed.left = true;
             break;
         case 38: //up
-            trailerMovingForward = true;
+            keysPressed.up = true;
             break;
         case 39: //right
-            trailerMovingRight = true;
+            keysPressed.right = true;
             break;
         case 40: //down
-            trailerMovingBackward = true;
+            keysPressed.down = true;
             break;
         case 49: //1
             camera = cameras.front;
@@ -310,28 +298,28 @@ function onKeyDown(e) {
             }
             break;
 		case 65: //a
-			aPressed = true;
+			keysPressed.a = true;
 			break;
 		case 68: //d
-			dPressed = true;
+			keysPressed.d = true;
 		    break;
 		case 69: //e
-			ePressed = true;
+			keysPressed.e = true;
 			break;
 		case 70: //f
-			fPressed = true;
+			keysPressed.f = true;
 			break;
 		case 81: //q
-			qPressed = true;
+			keysPressed.q = true;
 			break;
 		case 82: //r
-		    rPressed = true;
+		    keysPressed.r = true;
 		    break;
 		case 83: //s;
-			sPressed = true;
+			keysPressed.s = true;
 			break;
 		case 87: //w
-			wPressed = true;
+			keysPressed.w = true;
 			break;
     }
 }
@@ -348,40 +336,40 @@ function onKeyUp(e){
 
     switch (e.keyCode) {
         case 37: //left
-            trailerMovingLeft = false;
+            keysPressed.left = false;
             break;
         case 38: //up
-            trailerMovingForward = false;
+            keysPressed.up = false;
             break;
         case 39: //right
-            trailerMovingRight = false;
+            keysPressed.right = false;
             break;
         case 40: //down
-            trailerMovingBackward = false;
+            keysPressed.down = false;
             break;
 		case 65: //a
-            aPressed = false;
+            keysPressed.a = false;
             break;
         case 68: //d
-            dPressed = false;
+            keysPressed.d = false;
 	        break;
         case 69: //e
-            ePressed = false;
+            keysPressed.e = false;
             break;
         case 70: //f
-            fPressed = false;
+            keysPressed.f = false;
             break;
         case 81: //q
-            qPressed = false;
+            keysPressed.q = false;
             break;
 	    case 82: //r
-	        rPressed = false;
+	        keysPressed.r = false;
 	        break;
         case 83: //s;
-            sPressed = false;
+            keysPressed.s = false;
             break;
         case 87: //w
-            wPressed = false;
+            keysPressed.w = false;
             break;
     }
 }
@@ -391,19 +379,7 @@ function onKeyUp(e){
 ///////////////////////
 function deactivateInput() {
 
-    //Trailer
-    trailerMovingLeft = false;
-    trailerMovingRight = false;
-    trailerMovingForward = false;
-    trailerMovingBackward = false;
-
-    //Commands
-    qPressed = false;
-    aPressed = false;
-    wPressed = false;
-    sPressed = false;
-    ePressed = false;
-    dPressed = false;
-    rPressed = false;
-    fPressed = false;
+    for (var key in keysPressed) {
+        keysPressed[key] = false;
+    }
 }

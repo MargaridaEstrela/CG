@@ -74,15 +74,20 @@ function addWheel(obj, x, y, z, rx, ry, rz){
 
 }
 
-function updateTrailerPosition(){
+function updateTrailerPosition() {
     'use strict';
 
-    if (trailerMovingForward)
-        trailer.position.z += trailerSpeed;
-    if (trailerMovingBackward)
-        trailer.position.z -= trailerSpeed;
-    if (trailerMovingLeft)
-        trailer.position.x += trailerSpeed;
-    if (trailerMovingRight)
-        trailer.position.x -= trailerSpeed;
+    var movementVector = new THREE.Vector3();
+
+    if (keysPressed.up)
+        movementVector.z += 1;
+    if (keysPressed.down)
+        movementVector.z -= 1;
+    if (keysPressed.left)
+        movementVector.x += 1;
+    if (keysPressed.right)
+        movementVector.x -= 1;
+
+    movementVector.normalize().multiplyScalar(trailerSpeed);
+    trailer.position.add(movementVector);
 }

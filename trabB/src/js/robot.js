@@ -231,7 +231,7 @@ function addFoot(obj, x, y, z){
 }
     
 function updateRobot() {
-	if (qPressed) {
+	if (keysPressed.q) {
 		if (robotState[3]<41) {
 			var lFoot = robot.getObjectByName('lFoot');
 			var rFoot = robot.getObjectByName('rFoot');
@@ -240,7 +240,7 @@ function updateRobot() {
 			robotState[3] += 1;
 		}
 	}
-	if (aPressed) {
+	if (keysPressed.a) {
 		if (robotState[3] > 0) {
 			robotState[3] -= 1;
 			var lFoot = robot.getObjectByName('lFoot');
@@ -249,7 +249,7 @@ function updateRobot() {
 			rFoot.rotation.x = rotationSpeed * robotState[3] * Math.PI;
 		}
 	}
-	if (wPressed) {
+	if (keysPressed.w) {
 		if (robotState[2] < 21) {
 			var lThigh = robot.getObjectByName('lThigh');
 			var rThigh = robot.getObjectByName('rThigh');
@@ -258,7 +258,7 @@ function updateRobot() {
 			robotState[2] += 1;
 		}
 	}
-	if (sPressed) {
+	if (keysPressed.s) {
         if (robotState[2] > 0) {
 			robotState[2] -= 1;
             var lThigh = robot.getObjectByName('lThigh');
@@ -267,7 +267,7 @@ function updateRobot() {
             rThigh.rotation.x = rotationSpeed * robotState[2] * Math.PI;
         }
 	}
-	if (ePressed) {
+	if (keysPressed.e) {
         if (robotState[1] < 12) {
             var lArm = robot.getObjectByName('lArm');
             var rArm = robot.getObjectByName('rArm');
@@ -276,7 +276,7 @@ function updateRobot() {
             robotState[1] += 1;
         }
     }
-	if (dPressed) {
+	if (keysPressed.d) {
         if (robotState[1] > 0) {
 			robotState[1] -= 1;
             var lArm = robot.getObjectByName('lArm');
@@ -285,14 +285,14 @@ function updateRobot() {
             rArm.position.x += armSpeed * robotState[1];
         }
     }
-	if (rPressed) {
+	if (keysPressed.r) {
         if (robotState[0] < 41) {
             var head = robot.getObjectByName('Head');
             head.rotation.x = -rotationSpeed * robotState[0] * Math.PI;
             robotState[0] += 1;
         }
     }
-	if (fPressed) {
+	if (keysPressed.f) {
         if (robotState[0] > 0) {
 			robotState[0] -= 1;
             var head = robot.getObjectByName('Head');
