@@ -1,55 +1,45 @@
 
 function createCameraFront() {
 
-    cameras.front = new THREE.OrthographicCamera(
-        window.innerWidth / -20,
-        window.innerWidth / 20,
-        window.innerHeight / 20,
-        window.innerHeight / -20,
-        -1000,
-        1000,
+    cameras.front = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        1,
+        1000
     )
 
-    
     cameras.front.position.x = 0;
-    cameras.front.position.y = 15;
-    cameras.front.position.z = 40;
-    cameras.front.lookAt(0, 15, 0);
+    cameras.front.position.y = 30;
+    cameras.front.position.z = 100;
+    cameras.front.lookAt(0, 0, 0);
 }
 
 function createCameraSide() {
 
-    cameras.side = new THREE.OrthographicCamera(
-        window.innerWidth / -20,
-        window.innerWidth / 20,
-        window.innerHeight / 20,
-        window.innerHeight / -20,
-        -1000,
-        1000,
+    cameras.side = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        1,
+        1000
     )
 
-
-    cameras.side.position.x = 80;
-    cameras.side.position.y = 15;
+    cameras.side.position.x = 110;
+    cameras.side.position.y = 10;
     cameras.side.position.z = 0;
-    cameras.side.lookAt(0, 15, 0);
-
+    cameras.side.lookAt(0, 0, 0);
 }
 
 function createCameraTop() {
 
-    cameras.top = new THREE.OrthographicCamera(
-        window.innerWidth / -15,
-        window.innerWidth / 15,
-        window.innerHeight / 15,
-        window.innerHeight / -15,
-        -1000,
-        1000,
+    cameras.top = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        1,
+        1000
     )
 
-
     cameras.top.position.x = 0;
-    cameras.top.position.y = 20;
+    cameras.top.position.y = 150;
     cameras.top.position.z = 0;
     cameras.top.lookAt(0, 0, 0);
 }
