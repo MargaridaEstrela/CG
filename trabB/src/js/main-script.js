@@ -3,7 +3,7 @@
 //////////////////////
 
 //General
-var camera, renderer, scene;
+var camera, renderer, scene, axis;
 var geometry, mesh;
 
 var materials = {};
@@ -42,8 +42,9 @@ function createScene(){
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0.9,0.9,0.9);
-
-    scene.add(new THREE.AxisHelper(10));
+    axis = new THREE.AxesHelper(10);
+    axis.visible = false;
+    scene.add(axis);
 
     
     materials.default = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
@@ -310,6 +311,9 @@ function onKeyDown(e) {
 		case 70: //f
 			keysPressed.f = true;
 			break;
+        case 72: //h
+            axis.visible = !axis.visible;
+            break;
 		case 81: //q
 			keysPressed.q = true;
 			break;
