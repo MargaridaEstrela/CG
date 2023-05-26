@@ -47,10 +47,10 @@ function createCameraTop() {
 function createCameraOrthographic() {
     
     cameras.ortographic = new THREE.OrthographicCamera(
-        window.innerWidth / -15,
-        window.innerWidth / 15,
-        window.innerHeight / 15,
-        window.innerHeight / -15,
+        window.innerWidth / -12,
+        window.innerWidth / 12,
+        window.innerHeight / 12,
+        window.innerHeight / -12,
         -1000,
         1000,
     )
