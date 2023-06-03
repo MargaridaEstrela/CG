@@ -9,6 +9,12 @@ var materials = {};
 var cameras = {};
 var keysPressed = {};
 
+//Ovni
+var ovni;
+var rotationSpeed = 0.025;
+var ovniSpeed = 0.3;
+var target;
+
 /////////////////////
 /* CREATE SCENE(S) */
 /////////////////////
@@ -20,6 +26,8 @@ function createScene(){
     axis = new THREE.AxesHelper(10);
     axis.visible = false;
     scene.add(axis);
+
+	createOvni(0,30,0);
 
 }
 
@@ -42,6 +50,24 @@ function createCameras() {
 /* CREATE OBJECT3D(S) */
 ////////////////////////
 
+function createOvni(x, y, z) {
+	'use strict'
+	ovni = new THREE.Object3D();
+	addBody(ovni, 0, 0, 0);
+	addCockpit(ovni, 0, 0.6, 0);
+	addCylinder(ovni, 0, -1.2,0);
+	addBall(ovni,1.8, -1, 0);
+	addBall(ovni, -1.8, -1, 0);
+	addBall(ovni, 0, -1, -1.8);
+	addBall(ovni, 0, -1, 1.8);
+	addPlane(ovni, 0, -10, 0);
+	scene.add(ovni);
+
+	ovni.position.x = x;
+	ovni.position.y = y;
+	ovni.position.z = z;
+}
+
 //////////////////////
 /* CHECK COLLISIONS */
 //////////////////////
@@ -63,6 +89,8 @@ function handleCollisions(){
 ////////////
 function update(){
     'use strict';
+	updateOvniPosition();
+	target.position.set(ovni.position.x, 0, ovni.position.z); //update spotlight target
 
 }
 
@@ -129,8 +157,66 @@ function onResize() {
 ///////////////////////
 function onKeyDown(e) {
     'use strict';
-
+	switch(e.keyCode) {
+        case 37: //left
+            keysPressed.left = true;
+            break;
+        case 38: //up
+            keysPressed.up = true;
+            break;
+        case 39: //right
+            keysPressed.right = true;
+            break;
+        case 40: //down
+            keysPressed.down = true;
+            break;
+		case 69: //e
+			updateMaterials(new THREE.MeshToonMaterial());
+			break;
+		case 80: //p
+			updateOvniLights(new THREE.Color('lawngreen'));
+			break;
+		case 81: //q
+			updateMaterials(new THREE.MeshLambertMaterial());
+			break;
+		case 82: //r
+			updateMaterials(new THREE.MeshBasicMaterial());
+			break;
+		case 83: //s
+			updateOvniLights(new THREE.Color('yellow'));
+			break;
+		case 87: //w
+			updateMaterials(new THREE.MeshPhongMaterial());
+			break;
+	}
 }
+
+function updateMaterials(material) {
+	ovni.traverse(function(child) {
+	if (child instanceof THREE.Mesh) {
+		var color = child.material.color;
+		child.material = material.clone();
+		child.material.color.set(color);
+    }
+    });
+}
+
+
+function updateOvniLights(color) {
+    ovni.traverse(function(child) {
+    if (child instanceof THREE.Light) {
+        if (child.color.equals(color) ) {
+            if (child.intensity == 0) {
+                child.intensity = 0.5;
+            }
+            else {
+                child.intensity = 0;
+            }
+        }
+	}
+    });
+}
+
 
 ///////////////////////
 /* KEY UP CALLBACK */
@@ -138,4 +224,18 @@ function onKeyDown(e) {
 function onKeyUp(e){
     'use strict';
 
+    switch (e.keyCode) {
+        case 37: //left
+            keysPressed.left = false;
+            break;
+        case 38: //up
+            keysPressed.up = false;
+            break;
+        case 39: //right
+            keysPressed.right = false;
+            break;
+        case 40: //down
+            keysPressed.down = false;
+            break;
+	}
 }
