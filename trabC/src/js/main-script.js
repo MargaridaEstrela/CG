@@ -9,11 +9,18 @@ var materials = {};
 var cameras = {};
 var keysPressed = {};
 
+var mainPlane;
+
 //Ovni
 var ovni;
 var rotationSpeed = 0.025;
 var ovniSpeed = 0.3;
 var target;
+
+//Cork-Oak
+var corkOaksList = [];
+var corkOaksNumber = 50;
+var corkOakPositions = [];
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -28,7 +35,8 @@ function createScene(){
     scene.add(axis);
 
 	createOvni(0,30,0);
-
+    generateCoarOaks();
+    createMainPlane(0, 0, 0);
 }
 
 //////////////////////
@@ -49,6 +57,21 @@ function createCameras() {
 ////////////////////////
 /* CREATE OBJECT3D(S) */
 ////////////////////////
+function createCorkOak(x, y, z) {
+    'use strict';
+
+    var corkOak = new THREE.Object3D();
+
+    addMainTrunk(corkOak, 0, 0, 0);
+
+    scene.add(corkOak);
+
+    corkOak.position.x = x;
+    corkOak.position.y = y;
+    corkOak.position.z = z;
+
+    return corkOak;
+}
 
 function createOvni(x, y, z) {
 	'use strict'
@@ -66,6 +89,42 @@ function createOvni(x, y, z) {
 	ovni.position.x = x;
 	ovni.position.y = y;
 	ovni.position.z = z;
+}
+
+function createMainPlane(x, y, z) {
+    'use strict';
+    mainPlane = new THREE.Object3D();
+    geometry = new THREE.BoxGeometry(100, 1, 100);
+
+    var mainPlaneMaterial = new THREE.MeshBasicMaterial();
+    mainPlaneMaterial.color.set('oliveDrab');
+
+    mesh = new THREE.Mesh(geometry, mainPlaneMaterial);
+    mainPlane.add(mesh);
+
+    scene.add(mainPlane);
+
+    mainPlane.position.set(x, y, z);
+}
+
+
+/////////////////////////
+/* GENERATE COARK-OAKS */
+/////////////////////////
+function generateCoarOaks(){
+
+    for (var i = 0; i < corkOaksNumber; i++) {
+        var x = Math.random() * 90 - 45;
+        var z = Math.random() * 90 - 45;
+        corkOakPositions.push({ x: x, z: z });
+    }
+
+    for (var i = 0; i < corkOaksNumber; i++) {
+        var position = corkOakPositions[i];
+        var corkOak = createCorkOak(position.x, 1.5, position.z);
+        corkOaksList.push(corkOak);
+    }
+
 }
 
 //////////////////////
@@ -192,13 +251,33 @@ function onKeyDown(e) {
 }
 
 function updateMaterials(material) {
+    // Update ovni material
 	ovni.traverse(function(child) {
-	if (child instanceof THREE.Mesh) {
-		var color = child.material.color;
-		child.material = material.clone();
-		child.material.color.set(color);
-    }
+        if (child instanceof THREE.Mesh) {
+            var color = child.material.color;
+            child.material = material.clone();
+            child.material.color.set(color);
+        }
     });
+
+    // Update cork oaks material
+    corkOaksList.forEach(function(corkOak){
+        corkOak.traverse(function(child) {
+            if (child instanceof THREE.Mesh) {
+                var color = child.material.color.clone();
+                child.material = material.clone();
+                child.material.color.set(color);
+            }
+        });
+    });
+
+    // Update mainPlane material
+    if (mainPlane) {
+        var color = mainPlane.children[0].material.color.clone();
+        mainPlane.children[0].material = material.clone();
+        mainPlane.children[0].material.color.copy(color);
+    }
+
 }
 
 
