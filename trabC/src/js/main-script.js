@@ -22,6 +22,9 @@ var corkOaksList = [];
 var corkOaksNumber = 50;
 var corkOakPositions = [];
 
+//House
+var house;
+
 /////////////////////
 /* CREATE SCENE(S) */
 /////////////////////
@@ -36,6 +39,7 @@ function createScene(){
 
 	createOvni(0,30,0);
     generateCoarOaks();
+    createHouse(0,1.5,0);
     createMainPlane(0, 0, 0);
 }
 
@@ -92,6 +96,24 @@ function createOvni(x, y, z) {
 	ovni.position.x = x;
 	ovni.position.y = y;
 	ovni.position.z = z;
+}
+
+function createHouse(x, y, z) {
+    'use strict';
+
+    house = new THREE.Object3D();
+    addHouseStructure(house, x, y, z);
+    addDoor(house, x, y, z);
+    addWindows(house, x, y, z);
+    addRoof(house, x, y, z);
+    addChimney(house, x, y, z);
+    addCollumns(house, x, y, z);
+    addLine(house, x, y, z);
+
+    scene.add(house);
+
+    house.position.set(x, y, z);
+
 }
 
 function createMainPlane(x, y, z) {
@@ -273,6 +295,15 @@ function updateMaterials(material) {
                 child.material.color.set(color);
             }
         });
+    });
+
+    // Update house materials
+    house.traverse(function(child) {
+        if (child instanceof THREE.Mesh) {
+            var color = child.material.color;
+            child.material = material.clone();
+            child.material.color.set(color);
+        }
     });
 
     // Update mainPlane material
