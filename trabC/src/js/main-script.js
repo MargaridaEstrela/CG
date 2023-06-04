@@ -57,18 +57,21 @@ function createCameras() {
 ////////////////////////
 /* CREATE OBJECT3D(S) */
 ////////////////////////
-function createCorkOak(x, y, z) {
+function createCorkOak(x, y, z, rotation) {
     'use strict';
 
     var corkOak = new THREE.Object3D();
+
+    var scaleY = Math.random() * 0.5 + 0.5; // Random value between 0.5 and 1
+
+    corkOak.scale.set(1, scaleY, 1);
 
     addMainTrunk(corkOak, 0, 0, 0);
 
     scene.add(corkOak);
 
-    corkOak.position.x = x;
-    corkOak.position.y = y;
-    corkOak.position.z = z;
+    corkOak.position.set(x, y, z);
+    corkOak.rotation.set(0, rotation, 0);
 
     return corkOak;
 }
@@ -121,7 +124,8 @@ function generateCoarOaks(){
 
     for (var i = 0; i < corkOaksNumber; i++) {
         var position = corkOakPositions[i];
-        var corkOak = createCorkOak(position.x, 1.5, position.z);
+        var rotation = Math.random() * Math.PI * 4;
+        var corkOak = createCorkOak(position.x, 1.5, position.z, rotation);
         corkOaksList.push(corkOak);
     }
 
