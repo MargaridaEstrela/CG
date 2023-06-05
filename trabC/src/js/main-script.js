@@ -10,6 +10,10 @@ var cameras = {};
 var keysPressed = {};
 
 var mainPlane;
+var materialUpdate = 0;  // 0 - no update, 1 - Basic, 2 - Lambert, 3 - Phong, 4 - Toon;
+var directUpdate = false; 
+var pointUpdate = false;
+var spotUpdate = false;
 
 //Ovni
 var ovni;
@@ -197,8 +201,115 @@ function handleCollisions(){
 function update(){
     'use strict';
 	updateOvniPosition();
-	target.position.set(ovni.position.x, 0, ovni.position.z); //update spotlight target
+	updateLights();
+	switch(materialUpdate) {
+		case 1:
+			updateMaterials(new THREE.MeshBasicMaterial());
+			break;
+		case 2:
+			updateMaterials(new THREE.MeshLambertMaterial());
+			break;
+		case 3:
+			updateMaterials(new THREE.MeshPhongMaterial());
+			break;
+		case 4:
+			updateMaterials(new THREE.MeshToonMaterial());
+			break;
+	}
+	materialUpdate = 0;
+}
 
+function updateMaterials(material) {
+    // Update ovni material
+	ovni.traverse(function(child) {
+        if (child instanceof THREE.Mesh) {
+            var color = child.material.color;
+            child.material = material.clone();
+            child.material.color.set(color);
+        }
+    });
+
+    // Update cork oaks material
+    corkOaksList.forEach(function(corkOak){
+        corkOak.traverse(function(child) {
+            if (child instanceof THREE.Mesh) {
+                var color = child.material.color.clone();
+                child.material = material.clone();
+                child.material.color.set(color);
+            }
+        });
+    });
+
+    // Update house materials
+    house.traverse(function(child) {
+        if (child instanceof THREE.Mesh) {
+            var color = child.material.color;
+            child.material = material.clone();
+            child.material.color.set(color);
+        }
+    });
+
+    // Update mainPlane material
+    if (mainPlane) {
+        var color = mainPlane.children[0].material.color.clone();
+        mainPlane.children[0].material = material.clone();
+        mainPlane.children[0].material.color.copy(color);
+    }
+
+	//Update moon material
+	moon.traverse(function(child) {
+		if (child instanceof THREE.Mesh) {
+			var color = child.material.color;
+			child.material = material.clone();
+			child.material.color.set(color);
+			if (!(material instanceof(THREE.MeshBasicMaterial))) {
+				child.material.emissive.set(0xfBB81f);
+				child.material.emissiveIntensity = 1;
+			}
+		}
+	});
+}
+
+function updateLights() {
+	target.position.set(ovni.position.x, 0, ovni.position.z); //update spotlight target
+	
+	if (directUpdate) {
+		if (directionalLight.intensity == 0) {
+			directionalLight.intensity = 1;
+		}
+		else {
+			directionalLight.intensity = 0;
+		}
+		directUpdate = false;
+	}
+
+	if (pointUpdate) {
+		var pointColor = new THREE.Color('lawngreen');
+    	updateOvniLight(pointColor);
+		pointUpdate = false;
+	}
+
+	if (spotUpdate) {
+		var spotColor = new THREE.Color('green');
+		updateOvniLight(spotColor);
+		spotUpdate = false;
+	}
+
+}
+
+function updateOvniLight(color) {
+    ovni.traverse(function(child) {
+    if (child instanceof THREE.Light) {
+        if (child.color.equals(color) ) {
+            if (child.intensity == 0) {
+                child.intensity = 0.5;
+            }
+            else {
+                child.intensity = 0;
+            }
+        }
+	}
+    });
 }
 
 /////////////
@@ -281,98 +392,27 @@ function onKeyDown(e) {
             camera = cameras.grass;
             break;
         case 68: //d
-            if (directionalLight.intensity == 0) {
-                directionalLight.intensity = 1;
-            }
-            else {
-                directionalLight.intensity = 0;
-            }
+            directUpdate = !directUpdate;
             break;
 		case 69: //e
-			updateMaterials(new THREE.MeshToonMaterial());
+			materialUpdate = 4;
 			break;
 		case 80: //p
-			updateOvniLights(new THREE.Color('lawngreen'));
+			pointUpdate = true;
 			break;
 		case 81: //q
-			updateMaterials(new THREE.MeshLambertMaterial());
+			materialUpdate = 2;
 			break;
 		case 82: //r
-			updateMaterials(new THREE.MeshBasicMaterial());
+			materialUpdate = 1;
 			break;
 		case 83: //s
-			updateOvniLights(new THREE.Color('green'));
+			spotUpdate = true;
 			break;
 		case 87: //w
-			updateMaterials(new THREE.MeshPhongMaterial());
+			materialUpdate = 3;
 			break;
 	}
-}
-
-function updateMaterials(material) {
-    // Update ovni material
-	ovni.traverse(function(child) {
-        if (child instanceof THREE.Mesh) {
-            var color = child.material.color;
-            child.material = material.clone();
-            child.material.color.set(color);
-        }
-    });
-
-    // Update cork oaks material
-    corkOaksList.forEach(function(corkOak){
-        corkOak.traverse(function(child) {
-            if (child instanceof THREE.Mesh) {
-                var color = child.material.color.clone();
-                child.material = material.clone();
-                child.material.color.set(color);
-            }
-        });
-    });
-
-    // Update house materials
-    house.traverse(function(child) {
-        if (child instanceof THREE.Mesh) {
-            var color = child.material.color;
-            child.material = material.clone();
-            child.material.color.set(color);
-        }
-    });
-
-    // Update mainPlane material
-    if (mainPlane) {
-        var color = mainPlane.children[0].material.color.clone();
-        mainPlane.children[0].material = material.clone();
-        mainPlane.children[0].material.color.copy(color);
-    }
-	moon.traverse(function(child) {
-		if (child instanceof THREE.Mesh) {
-			var color = child.material.color;
-			child.material = material.clone();
-			child.material.color.set(color);
-			if (!(material instanceof(THREE.MeshBasicMaterial))) {
-				child.material.emissive.set(0xfBB81f);
-				child.material.emissiveIntensity = 1;
-			}
-		}
-	});
-
-}
-
-
-function updateOvniLights(color) {
-    ovni.traverse(function(child) {
-    if (child instanceof THREE.Light) {
-        if (child.color.equals(color) ) {
-            if (child.intensity == 0) {
-                child.intensity = 0.5;
-            }
-            else {
-                child.intensity = 0;
-            }
-        }
-	}
-    });
 }
 
 
