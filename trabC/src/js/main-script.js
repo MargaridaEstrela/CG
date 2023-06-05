@@ -34,6 +34,10 @@ var moon;
 var directionalLight;
 var ambientLight;
 
+//Skydome
+var skydome;
+var sphereRadius = 32;
+
 /////////////////////
 /* CREATE SCENE(S) */
 /////////////////////
@@ -50,10 +54,13 @@ function createScene(){
     generateCoarOaks();
     createHouse(0,1.5,0);
     createMainPlane(0, 0, 0);
-	createMoon(-60, 30, -60); 
+
+	createMoon(-22, 30, -22); 
     // change scene to green plane
     createGrassPlane();
     scene.add(grassPlane);
+    
+    createSkydome();
 }
 
 //////////////////////
@@ -139,7 +146,7 @@ function createHouse(x, y, z) {
 function createMainPlane(x, y, z) {
     'use strict';
     mainPlane = new THREE.Object3D();
-    geometry = new THREE.BoxGeometry(100, 1, 100);
+    geometry = new THREE.CylinderGeometry(50, 50, 0, 64);
 
     var mainPlaneMaterial = new THREE.MeshBasicMaterial();
     mainPlaneMaterial.color.set('oliveDrab');
@@ -152,6 +159,19 @@ function createMainPlane(x, y, z) {
     mainPlane.position.set(x, y, z);
 }
 
+function createSkydome() {
+    geometry = new THREE.SphereGeometry(50, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.5); 
+
+    material = new THREE.MeshBasicMaterial({ 
+        color: "darkblue",
+        side: THREE.BackSide,
+        transparent: true,
+        opacity: 0.8
+    });
+    
+    skydome = new THREE.Mesh(geometry, material);
+    scene.add(skydome);
+}
 
 /////////////////////////
 /* GENERATE CORK-OAKS */
@@ -159,21 +179,32 @@ function createMainPlane(x, y, z) {
 function generateCoarOaks(){
 
     for (var i = 0; i < corkOaksNumber; i++) {
-        var x;
-        do {
-            x = Math.random() * 90 - 45;
-        } while (x > -10 && x < 10);
-        var z;
-        do {
-            z = Math.random() * 90 - 45;
-        } while (z > -10 && z < 10);
-        corkOakPositions.push({ x: x, z: z });
-    }
+        var phi, theta;
 
-    for (var i = 0; i < corkOaksNumber; i++) {
-        var position = corkOakPositions[i];
+        do {
+            phi = Math.random() * Math.PI - Math.PI / 2;
+            theta = Math.random() * Math.PI * 2;
+        } while (Math.abs(Math.sin(phi) * Math.cos(theta)) < 0.1);
+
+        var radius = 32;
+
+        var x = radius * Math.sin(phi) * Math.cos(theta);
+        var y = radius * Math.cos(phi);
+        var z = radius * Math.sin(phi) * Math.sin(theta);
+
         var rotation = Math.random() * Math.PI * 4;
-        var corkOak = createCorkOak(position.x, 1.5, position.z, rotation);
+        var corkOak = createCorkOak(x, y, z, rotation);
+
+        while (corkOak.position.x > -10 && corkOak.position.x < 10) {
+            corkOak.position.x = Math.random() * radius * 2 - radius;
+        }
+
+        while (corkOak.position.z > -10 && corkOak.position.z < 10) {
+            corkOak.position.z = Math.random() * radius * 2 - radius;
+        }
+
+        corkOak.position.y = 0;
+
         corkOaksList.push(corkOak);
     }
 
@@ -414,7 +445,6 @@ function onKeyDown(e) {
 			break;
 	}
 }
-
 
 ///////////////////////
 /* KEY UP CALLBACK */
