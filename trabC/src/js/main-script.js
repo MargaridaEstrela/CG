@@ -10,7 +10,9 @@ var cameras = {};
 var keysPressed = {};
 
 var mainPlane;
-var materialUpdate = 0;  // 0 - no update, 1 - Basic, 2 - Lambert, 3 - Phong, 4 - Toon;
+// 0 - no update, 1 - Basic, 2 - Lambert, 3 - Phong, 4 - Toon;
+// 5 - Grass Texture, 6 - Sky Texture;
+var materialUpdate = 0;  
 var directUpdate = false; 
 var pointUpdate = false;
 var spotUpdate = false;
@@ -53,13 +55,12 @@ function createScene(){
 	createOvni(0,30,0);
     generateCoarOaks();
     createHouse(0,1.5,0);
+    createGrassTexture();
     createMainPlane(0, 0, 0);
 
-	createMoon(-22, 30, -22); 
-    // change scene to green plane
-    createGrassPlane();
-    scene.add(grassPlane);
+	createMoon(-22, 30, -22);
     
+    createSkyTexture();
     createSkydome();
 }
 
@@ -148,8 +149,7 @@ function createMainPlane(x, y, z) {
     mainPlane = new THREE.Object3D();
     geometry = new THREE.CylinderGeometry(50, 50, 0, 64);
 
-    var mainPlaneMaterial = new THREE.MeshBasicMaterial();
-    mainPlaneMaterial.color.set('oliveDrab');
+    var mainPlaneMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 
     mesh = new THREE.Mesh(geometry, mainPlaneMaterial);
     mainPlane.add(mesh);
@@ -166,7 +166,9 @@ function createSkydome() {
         color: "darkblue",
         side: THREE.BackSide,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.8,
+        map: skyTexture,
+        side: THREE.BackSide,
     });
     
     skydome = new THREE.Mesh(geometry, material);
@@ -246,6 +248,14 @@ function update(){
 		case 4:
 			updateMaterials(new THREE.MeshToonMaterial());
 			break;
+        case 5:
+            createGrassTexture();
+            mainPlane.children[0].material.map = grassTexture;
+            break;
+        case 6:
+            createSkyTexture();
+            skydome.material.map = skyTexture;
+            break;
 	}
 	materialUpdate = 0;
 }
@@ -284,7 +294,14 @@ function updateMaterials(material) {
     if (mainPlane) {
         var color = mainPlane.children[0].material.color.clone();
         mainPlane.children[0].material = material.clone();
-        mainPlane.children[0].material.color.copy(color);
+        mainPlane.children[0].material.map = grassTexture;
+    }
+
+    // Update skydome material
+    if (skydome) {
+        var color = skydome.material.color.clone();
+        skydome.material = material.clone();
+        skydome.material.color.set(color);
     }
 
 	//Update moon material
@@ -362,9 +379,10 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    createScene();
     createCameras();
+    createScene();
     
+    // camera = cameras.grass;
     camera = cameras.front;
 
     render();
@@ -420,7 +438,10 @@ function onKeyDown(e) {
             keysPressed.down = true;
             break;
         case 49: //1
-            camera = cameras.grass;
+            materialUpdate = 5;
+            break;
+        case 50: //2
+            materialUpdate = 6;
             break;
         case 68: //d
             directUpdate = !directUpdate;
@@ -464,10 +485,6 @@ function onKeyUp(e){
             break;
         case 40: //down
             keysPressed.down = false;
-            break;
-        case 49: //1
-            camera = cameras.front;
-            createGrassPlane();
             break;
 	}
 }
