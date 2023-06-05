@@ -139,8 +139,14 @@ function createMainPlane(x, y, z) {
 function generateCoarOaks(){
 
     for (var i = 0; i < corkOaksNumber; i++) {
-        var x = Math.random() * 90 - 45;
-        var z = Math.random() * 90 - 45;
+        var x;
+        do {
+            x = Math.random() * 90 - 45;
+        } while (x > -10 && x < 10);
+        var z;
+        do {
+            z = Math.random() * 90 - 45;
+        } while (z > -10 && z < 10);
         corkOakPositions.push({ x: x, z: z });
     }
 

@@ -275,7 +275,7 @@ function addCollumns(obj, x, y, z){
     geometry.computeVertexNormals(); 
 
     var collumnsMaterial = new THREE.MeshBasicMaterial();
-    collumnsMaterial.color.set("powderblue");
+    collumnsMaterial.color.set("royalblue");
 
     var collumnsMesh = new THREE.Mesh(geometry, collumnsMaterial);
     collumnsMesh.position.set(x, y, z);
