@@ -42,7 +42,7 @@ function addCylinder(obj, x ,y ,z) {
 	cylinder.add(mesh);
 	obj.add(cylinder);
 
-	var spotLight = new THREE.SpotLight('yellow');
+	var spotLight = new THREE.SpotLight('green');
 	spotLight.position.set(x , y , z);
 	spotLight.intensity = 0.5;
 	spotLight.angle = Math.PI / 4;

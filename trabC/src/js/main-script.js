@@ -25,6 +25,11 @@ var corkOakPositions = [];
 //House
 var house;
 
+//Moon
+var moon;
+var directionalLight;
+var ambientLight;
+
 /////////////////////
 /* CREATE SCENE(S) */
 /////////////////////
@@ -32,7 +37,7 @@ function createScene(){
     'use strict';
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0.9,0.9,0.9);
+    scene.background = new THREE.Color(0,0,0);
     axis = new THREE.AxesHelper(10);
     axis.visible = false;
     scene.add(axis);
@@ -41,6 +46,7 @@ function createScene(){
     generateCoarOaks();
     createHouse(0,1.5,0);
     createMainPlane(0, 0, 0);
+	createMoon(-60, 30, -60); 
 }
 
 //////////////////////
@@ -78,6 +84,13 @@ function createCorkOak(x, y, z, rotation) {
     corkOak.rotation.set(0, rotation, 0);
 
     return corkOak;
+}
+
+function createMoon(x, y, z) {
+	'use strict'
+	addMoon(x,y,z);
+	addDirectionalLight();
+	addAmbientLight();
 }
 
 function createOvni(x, y, z) {
@@ -260,6 +273,14 @@ function onKeyDown(e) {
         case 40: //down
             keysPressed.down = true;
             break;
+		case 68: //d
+			if (directionalLight.intensity == 0) {
+				directionalLight.intensity = 1;
+			}
+			else {
+				directionalLight.intensity = 0;
+			}
+			break;
 		case 69: //e
 			updateMaterials(new THREE.MeshToonMaterial());
 			break;
@@ -273,7 +294,7 @@ function onKeyDown(e) {
 			updateMaterials(new THREE.MeshBasicMaterial());
 			break;
 		case 83: //s
-			updateOvniLights(new THREE.Color('yellow'));
+			updateOvniLights(new THREE.Color('green'));
 			break;
 		case 87: //w
 			updateMaterials(new THREE.MeshPhongMaterial());
@@ -317,6 +338,17 @@ function updateMaterials(material) {
         mainPlane.children[0].material = material.clone();
         mainPlane.children[0].material.color.copy(color);
     }
+	moon.traverse(function(child) {
+		if (child instanceof THREE.Mesh) {
+			var color = child.material.color;
+			child.material = material.clone();
+			child.material.color.set(color);
+			if (!(material instanceof(THREE.MeshBasicMaterial))) {
+				child.material.emissive.set(0xfBB81f);
+				child.material.emissiveIntensity = 1;
+			}
+		}
+	});
 
 }
 
