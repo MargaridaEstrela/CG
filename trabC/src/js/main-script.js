@@ -90,7 +90,6 @@ function createOvni(x, y, z) {
 	addBall(ovni, -1.8, -1, 0);
 	addBall(ovni, 0, -1, -1.8);
 	addBall(ovni, 0, -1, 1.8);
-	addPlane(ovni, 0, -10, 0);
 	scene.add(ovni);
 
 	ovni.position.x = x;

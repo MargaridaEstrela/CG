@@ -29,22 +29,6 @@ function addCockpit(obj, x, y, z) {
 	obj.add(cockpit);
 }
 
-function addPlane(obj, x, y, z) {
-        'use strict'
-        var plane = new THREE.Object3D();
-        geometry = new THREE.BoxGeometry(60,3,60);
-
-        var planeMaterial = new THREE.MeshBasicMaterial();
-        planeMaterial.color.set('grey');
-
-        mesh = new THREE.Mesh(geometry, planeMaterial);
-        mesh.position.set(x,y,z);
-        plane.add(mesh);
-        obj.add(plane);
-}
-
-
-
 function addCylinder(obj, x ,y ,z) {
 	'use strict'
 	var cylinder = new THREE.Object3D();
