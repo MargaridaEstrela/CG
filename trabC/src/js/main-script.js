@@ -47,6 +47,9 @@ function createScene(){
     createHouse(0,1.5,0);
     createMainPlane(0, 0, 0);
 	createMoon(-60, 30, -60); 
+    // change scene to green plane
+    createGrassPlane();
+    scene.add(grassPlane);
 }
 
 //////////////////////
@@ -54,6 +57,7 @@ function createScene(){
 //////////////////////
 function createCameras() {
     createCameraFront();
+    createCameraGrass();
     createCameraSide();
     createCameraTop();
     createCameraOrthographic();
@@ -146,7 +150,7 @@ function createMainPlane(x, y, z) {
 
 
 /////////////////////////
-/* GENERATE COARK-OAKS */
+/* GENERATE CORK-OAKS */
 /////////////////////////
 function generateCoarOaks(){
 
@@ -273,14 +277,17 @@ function onKeyDown(e) {
         case 40: //down
             keysPressed.down = true;
             break;
-		case 68: //d
-			if (directionalLight.intensity == 0) {
-				directionalLight.intensity = 1;
-			}
-			else {
-				directionalLight.intensity = 0;
-			}
-			break;
+        case 49: //1
+            camera = cameras.grass;
+            break;
+        case 68: //d
+            if (directionalLight.intensity == 0) {
+                directionalLight.intensity = 1;
+            }
+            else {
+                directionalLight.intensity = 0;
+            }
+            break;
 		case 69: //e
 			updateMaterials(new THREE.MeshToonMaterial());
 			break;
@@ -387,6 +394,10 @@ function onKeyUp(e){
             break;
         case 40: //down
             keysPressed.down = false;
+            break;
+        case 49: //1
+            camera = cameras.front;
+            createGrassPlane();
             break;
 	}
 }
