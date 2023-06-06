@@ -1,4 +1,3 @@
-
 function addBody(obj, x, y, z) {
 	'use strict'
 	var body = new THREE.Object3D();
@@ -86,8 +85,20 @@ function updateOvniPosition() {
         movementVector.x -= 1;
 
     movementVector.normalize().multiplyScalar(ovniSpeed);
-    ovni.position.add(movementVector);
-	ovni.rotateY(rotationSpeed * Math.PI); 
+
+    var newPosition = ovni.position.clone().add(movementVector);
+
+    if (isPositionWithinSkydome(newPosition) && newPosition.y === 20) {
+        ovni.position.copy(newPosition);
+    }
+
+    ovni.rotateY(rotationSpeed * Math.PI);
+}
+
+function isPositionWithinSkydome(position) {
+    var radius = 42;
+    var positionOnSkydome = new THREE.Vector3(position.x, 0, position.z);
+    return positionOnSkydome.length() <= radius;
 }
 
 

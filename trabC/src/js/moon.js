@@ -1,7 +1,7 @@
 function addMoon(x, y, z) {
 	'use strict'
 	moon = new THREE.Object3D();
-	geometry = new THREE.SphereGeometry(10, 64, 32);
+	geometry = new THREE.SphereGeometry(7, 64, 32);
 
 	var moonMaterial = new THREE.MeshBasicMaterial();
 	moonMaterial.color.set(0xfBB81f);

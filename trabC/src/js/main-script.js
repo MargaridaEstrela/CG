@@ -52,7 +52,7 @@ function createScene(){
     axis.visible = false;
     scene.add(axis);
 
-	createOvni(0,30,0);
+	createOvni(0,20,0);
     generateCoarOaks();
     createHouse(0,1.5,0);
     createGrassTexture();
