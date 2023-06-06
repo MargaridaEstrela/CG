@@ -298,11 +298,11 @@ function updateMaterials(material) {
     }
 
     // Update skydome material
-    if (skydome) {
-        var color = skydome.material.color.clone();
-        skydome.material = material.clone();
-        skydome.material.color.set(color);
-    }
+    // if (skydome) {
+    //     var color = skydome.material.color.clone();
+    //     skydome.material = material.clone();
+    //     skydome.material.color.set(color);
+    // }
 
 	//Update moon material
 	moon.traverse(function(child) {
