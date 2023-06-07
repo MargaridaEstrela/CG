@@ -96,7 +96,7 @@ function updateOvniPosition() {
 }
 
 function isPositionWithinSkydome(position) {
-    var radius = 41;
+    var radius = 61;
     var positionOnSkydome = new THREE.Vector3(position.x, 0, position.z);
     return positionOnSkydome.length() <= radius;
 }

@@ -2,6 +2,8 @@
 /* GLOBAL VARIABLES */
 //////////////////////
 //General
+//
+
 var camera, renderer, scene, axis;
 var geometry, mesh;
 
@@ -25,7 +27,7 @@ var target;
 
 //Cork-Oak
 var corkOaksList = [];
-var corkOaksNumber = 50;
+var corkOaksNumber = 70;
 var corkOakPositions = [];
 
 //House
@@ -58,7 +60,7 @@ function createScene(){
     createGrassTexture();
     createMainPlane(0, 0, 0);
 
-	createMoon(-22, 30, -22);
+	createMoon(-50, 35, -10);
     
     createSkyTexture();
     createSkydome();
@@ -147,7 +149,7 @@ function createHouse(x, y, z) {
 function createMainPlane(x, y, z) {
     'use strict';
     mainPlane = new THREE.Object3D();
-    geometry = new THREE.CylinderGeometry(50, 50, 0, 64);
+    geometry = new THREE.CylinderGeometry(70, 70, 0, 64);
 
     var mainPlaneMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 
@@ -160,7 +162,7 @@ function createMainPlane(x, y, z) {
 }
 
 function createSkydome() {
-    geometry = new THREE.SphereGeometry(50, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.5); 
+    geometry = new THREE.SphereGeometry(70, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.5); 
 
     material = new THREE.MeshBasicMaterial({ 
         color: "darkblue",
@@ -188,7 +190,7 @@ function generateCoarOaks(){
             theta = Math.random() * Math.PI * 2;
         } while (Math.abs(Math.sin(phi) * Math.cos(theta)) < 0.1);
 
-        var radius = 32;
+        var radius = 47;
 
         var x = radius * Math.sin(phi) * Math.cos(theta);
         var y = radius * Math.cos(phi);
@@ -365,7 +367,9 @@ function updateOvniLight(color) {
 /////////////
 function render() {
     'use strict';
-    renderer.render(scene, camera);
+	if (!renderer.xr.isPresenting) {	
+    		renderer.render(scene, camera);
+	}
 }
 
 ////////////////////////////////
@@ -378,6 +382,8 @@ function init() {
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+	document.body.appendChild( VRButton.createButton( renderer ) );
+	renderer.xr.enabled = true;
 
     createCameras();
     createScene();
@@ -401,8 +407,16 @@ function animate() {
     update();
 
     render();
+	if (renderer.xr.isPresenting) {
+		renderer.setAnimationLoop( function () {
 
-    requestAnimationFrame(animate);
+			renderer.render( scene, camera );
+
+		});
+	}
+	else {
+		requestAnimationFrame(animate);
+	}
 }
 
 ////////////////////////////
