@@ -9,8 +9,8 @@ function createCameraFront() {
     )
 
     cameras.front.position.x = 0;
-    cameras.front.position.y = 50;
-    cameras.front.position.z = 60;
+    cameras.front.position.y = 30;
+    cameras.front.position.z = 75;
     cameras.front.lookAt(0, 0, 0);
 }
 
@@ -92,4 +92,26 @@ function createCameraPerspective() {
     cameras.perspective.position.z = 50;
     cameras.perspective.lookAt(0, 0, 0);
 
+}
+
+function createCameraStereo() {
+	cameras.stereoCamera = new THREE.StereoCamera();
+	cameras.stereoCamera.aspect = 0.5;
+    cameras.stereoCamera.left = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        1,
+        1000
+    )
+
+	cameras.stereoCamera.left.position.set(-0.2,1.70,0);
+	cameras.stereoCamera.left.lookAt(0,1.70,-1);
+    cameras.stereoCamera.right = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        1,
+        1000
+    )
+	cameras.stereoCamera.right.position.set(0.2,1.70,0)
+	cameras.stereoCamera.right.lookAt(0,1.70,-1);
 }

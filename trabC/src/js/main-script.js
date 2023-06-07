@@ -3,7 +3,6 @@
 //////////////////////
 //General
 //
-
 var camera, renderer, scene, axis;
 var geometry, mesh;
 
@@ -56,7 +55,7 @@ function createScene(){
 
 	createOvni(0,20,0);
     generateCoarOaks();
-    createHouse(0,1.5,0);
+    createHouse(0,0,0);
     createGrassTexture();
     createMainPlane(0, 0, 0);
 
@@ -76,6 +75,7 @@ function createCameras() {
     createCameraTop();
     createCameraOrthographic();
     createCameraPerspective();
+	createCameraStereo();
 }
 
 /////////////////////
@@ -142,7 +142,7 @@ function createHouse(x, y, z) {
 
     scene.add(house);
 
-    house.position.set(x, y, z);
+    house.position.set(x, y, z - 10);
 
 }
 
@@ -367,9 +367,7 @@ function updateOvniLight(color) {
 /////////////
 function render() {
     'use strict';
-	if (!renderer.xr.isPresenting) {	
-    		renderer.render(scene, camera);
-	}
+    renderer.render(scene, camera);
 }
 
 ////////////////////////////////
@@ -408,11 +406,7 @@ function animate() {
 
     render();
 	if (renderer.xr.isPresenting) {
-		renderer.setAnimationLoop( function () {
-
-			renderer.render( scene, camera );
-
-		});
+		renderer.xr.setAnimationLoop( animate);
 	}
 	else {
 		requestAnimationFrame(animate);
