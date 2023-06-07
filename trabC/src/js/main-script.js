@@ -163,12 +163,10 @@ function createSkydome() {
     geometry = new THREE.SphereGeometry(50, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.5); 
 
     material = new THREE.MeshBasicMaterial({ 
-        color: "darkblue",
         side: THREE.BackSide,
+        map: skyTexture,
         transparent: true,
         opacity: 0.8,
-        map: skyTexture,
-        side: THREE.BackSide,
     });
     
     skydome = new THREE.Mesh(geometry, material);
@@ -298,11 +296,13 @@ function updateMaterials(material) {
     }
 
     // Update skydome material
-    // if (skydome) {
-    //     var color = skydome.material.color.clone();
-    //     skydome.material = material.clone();
-    //     skydome.material.color.set(color);
-    // }
+    if (skydome) {
+        skydome.material = material.clone();
+        skydome.material.map = skyTexture;
+        skydome.material.side = THREE.BackSide;
+        skydome.material.transparent = true;
+        skydome.material.opacity = 0.8;
+    }
 
 	//Update moon material
 	moon.traverse(function(child) {
