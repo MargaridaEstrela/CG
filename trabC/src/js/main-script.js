@@ -72,10 +72,6 @@ function createScene(){
 function createCameras() {
     createCameraFront();
     createCameraGrass();
-    createCameraSide();
-    createCameraTop();
-    createCameraOrthographic();
-    createCameraPerspective();
 	createCameraStereo();
 }
 
