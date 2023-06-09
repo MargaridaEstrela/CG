@@ -3,7 +3,7 @@
 //////////////////////
 //General
 //
-var camera, renderer, scene, axis;
+var camera, renderer, scene, axis, clock;
 var geometry, mesh;
 
 var materials = {};
@@ -21,7 +21,7 @@ var spotUpdate = false;
 //Ovni
 var ovni;
 var rotationSpeed = 0.025;
-var ovniSpeed = 0.3;
+var ovniSpeed = 20;
 var target;
 
 //Cork-Oak
@@ -234,6 +234,7 @@ function handleCollisions(){
 ////////////
 function update(){
     'use strict';
+
 	updateOvniPosition();
 	updateLights();
 	switch(materialUpdate) {
@@ -372,6 +373,7 @@ function updateOvniLight(color) {
 /////////////
 function render() {
     'use strict';
+
     renderer.render(scene, camera);
 }
 
@@ -392,8 +394,9 @@ function init() {
     loadHeightMap();
     createScene();
     
-    // camera = cameras.grass;
     camera = cameras.front;
+
+    clock = new THREE.Clock();
 
     render();
 

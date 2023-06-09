@@ -85,6 +85,7 @@ function updateOvniPosition() {
         movementVector.x -= 1;
 
     movementVector.normalize().multiplyScalar(ovniSpeed);
+	movementVector.multiplyScalar(clock.getDelta());
 
     var newPosition = ovni.position.clone().add(movementVector);
 
