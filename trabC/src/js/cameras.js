@@ -9,8 +9,8 @@ function createCameraFront() {
     )
 
     cameras.front.position.x = 0;
-    cameras.front.position.y = 30;
-    cameras.front.position.z = 75;
+    cameras.front.position.y = 5;
+    cameras.front.position.z = 40;
     cameras.front.lookAt(0, 0, 0);
 }
 

@@ -1,4 +1,4 @@
-const grassSize = window.innerWidth * 1.003;
+const grassSize = window.innerWidth * 1.3;
 const minCircleSize = window.innerWidth * 0.001;
 const maxCircleSize = window.innerWidth * 0.003;
 const minFlowersNumber = 500;
@@ -14,7 +14,7 @@ function createCircle(circleSize, color) {
     
     var geometry = new THREE.CircleGeometry( circleSize, 32 );
     var material = new THREE.MeshBasicMaterial( { color: color } );
-    var flower = new THREE.Mesh( geometry, material );
+    var circle = new THREE.Mesh( geometry, material );
 
     var minX = -grassSize/2 + circleSize;
     var maxX = grassSize/2 - circleSize;
@@ -23,17 +23,9 @@ function createCircle(circleSize, color) {
 
     var x = Math.random() * (maxX - minX) + minX;
     var y = Math.random() * (maxY - minY) + minY;
-    flower.position.set(x, y, 1);
+    circle.position.set(x, y, 1);
 
-    return flower;
-
-}
-
-function createStar(circleSize) {
-
-    var geometry = new THREE.CircleGeometry( circleSize, 32 );
-    var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-    var star = new THREE.Mesh( geometry, material );
+    return circle;
 
 }
 
@@ -116,7 +108,6 @@ function createSkyTexture() {
     
 }
 
-// create a gradient
 function createGradientTexture() {
     
     var canvas = document.createElement('canvas');
@@ -136,5 +127,12 @@ function createGradientTexture() {
     texture.needsUpdate = true;
 
     return texture;
+    
+}
+
+function loadHeightMap() {
+    
+    var loader = new THREE.TextureLoader();    
+    heightMap = loader.load('assets/heightmap.png');
     
 }

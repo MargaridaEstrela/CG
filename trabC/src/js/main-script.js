@@ -40,6 +40,7 @@ var ambientLight;
 //Skydome
 var skydome;
 var sphereRadius = 32;
+var heightMap;
 
 /////////////////////
 /* CREATE SCENE(S) */
@@ -54,7 +55,7 @@ function createScene(){
     scene.add(axis);
 
 	createOvni(0,20,0);
-    generateCoarOaks();
+    generateCorkOaks();
     createHouse(0,0,0);
     createGrassTexture();
     createMainPlane(0, 0, 0);
@@ -151,7 +152,9 @@ function createMainPlane(x, y, z) {
     mainPlane = new THREE.Object3D();
     geometry = new THREE.CylinderGeometry(70, 70, 0, 64);
 
-    var mainPlaneMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
+    var mainPlaneMaterial = new THREE.MeshBasicMaterial({
+        map: grassTexture, 
+    });
 
     mesh = new THREE.Mesh(geometry, mainPlaneMaterial);
     mainPlane.add(mesh);
@@ -178,7 +181,7 @@ function createSkydome() {
 /////////////////////////
 /* GENERATE CORK-OAKS */
 /////////////////////////
-function generateCoarOaks(){
+function generateCorkOaks(){
 
     for (var i = 0; i < corkOaksNumber; i++) {
         var phi, theta;
@@ -292,9 +295,13 @@ function updateMaterials(material) {
 
     // Update mainPlane material
     if (mainPlane) {
-        var color = mainPlane.children[0].material.color.clone();
         mainPlane.children[0].material = material.clone();
         mainPlane.children[0].material.map = grassTexture;
+        if (materialUpdate == 3 || materialUpdate == 4) {
+            mainPlane.children[0].material.displacementMap = heightMap;
+            mainPlane.children[0].material.displacementScale = 15;
+            mainPlane.children[0].material.displacementBias = -4;
+        }
     }
 
     // Update skydome material
@@ -384,6 +391,7 @@ function init() {
 	renderer.xr.enabled = true;
 
     createCameras();
+    loadHeightMap();
     createScene();
     
     // camera = cameras.grass;
