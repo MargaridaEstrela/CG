@@ -175,6 +175,8 @@ function createSkydome() {
     });
     
     skydome = new THREE.Mesh(geometry, material);
+
+    skydome.position.y = -2;
     scene.add(skydome);
 }
 
