@@ -161,7 +161,7 @@ function createMainPlane(x, y, z) {
 }
 
 function createSkydome() {
-    geometry = new THREE.SphereGeometry(70, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.5); 
+    geometry = new THREE.SphereGeometry(70, 64, 64, 0, Math.PI * 2, 0, Math.PI); 
 
     material = new THREE.MeshBasicMaterial({ 
         side: THREE.BackSide,
